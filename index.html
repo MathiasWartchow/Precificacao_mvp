@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diagnóstico de Preço</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<h2>Descubra em 30 segundos quanto você está perdendo</h2>
+
+<input id="preco" type="number" placeholder="Preço de venda"><br><br>
+<input id="custo" type="number" placeholder="Custo por unidade"><br><br>
+<input id="quantidade" type="number" placeholder="Quantidade por mês"><br><br>
+
+<select id="segmento">
+  <option value="">Selecione seu segmento</option>
+  <option value="servico">Serviço</option>
+  <option value="comercio">Comércio</option>
+  <option value="industria">Indústria</option>
+</select><br><br>
+
+<button onclick="calcular()">Calcular</button>
+
+<h3 id="resultado"></h3>
+
+<script>
+function calcular() {
+  let preco = parseFloat(document.getElementById('preco').value);
+  let custo = parseFloat(document.getElementById('custo').value);
+  let quantidade = parseFloat(document.getElementById('quantidade').value);
+  let segmento = document.getElementById('segmento').value;
+
+  if (!preco || !custo || !quantidade || !segmento) {
+    document.getElementById('resultado').innerHTML = "Preencha todos os campos.";
+    return;
+  }
+
+  let margens = {
+    servico: 0.30,
+    comercio: 0.20,
+    industria: 0.15
+  };
+
+  let margemTarget = margens[segmento];
+
+  let margem = (preco - custo) / preco;
+  let lucro = (preco - custo) * quantidade;
+
+  let precoIdeal = custo / (1 - margemTarget);
+  let lucroIdeal = (precoIdeal - custo) * quantidade;
+
+  let perda = lucroIdeal - lucro;
+
+  document.getElementById('resultado').innerHTML = `
+    Margem atual: ${(margem * 100).toFixed(1)}% <br><br>
+    Lucro mensal: R$ ${lucro.toFixed(2)} <br><br>
+    Preço ideal no seu segmento: R$ ${precoIdeal.toFixed(2)} <br><br>
+    <strong>Você está perdendo R$ ${perda.toFixed(2)} TODOS OS MESES.</strong>
+  `;
+}
+</script>
+
+</body>
+</html>
