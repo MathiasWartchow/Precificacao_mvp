@@ -9,41 +9,74 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --card-soft: #f8fafc;
+      --text: #142033;
+      --muted: #667085;
+      --line: #e6eaf0;
+      --shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+
+      --danger: #c62828;
+      --danger-bg: #fdecec;
+
+      --warning: #b26a00;
+      --warning-bg: #fff4dd;
+
+      --success: #0f7b47;
+      --success-bg: #eaf8f0;
+
+      --info: #1d4ed8;
+      --info-bg: #eaf1ff;
+
+      --dark: #101828;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f6f7fb;
-      color: #1f2937;
+      background: linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+      color: var(--text);
       padding: 24px;
     }
 
     .wrap {
-      max-width: 760px;
+      max-width: 1040px;
       margin: 0 auto;
     }
 
     .card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      background: var(--card);
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(16, 24, 40, 0.04);
     }
 
     h1 {
       margin: 0 0 10px;
-      font-size: 30px;
-      line-height: 1.15;
+      font-size: 32px;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
     }
 
     .sub {
       margin: 0 0 24px;
-      color: #4b5563;
+      color: var(--muted);
       font-size: 16px;
       line-height: 1.5;
+      max-width: 760px;
     }
 
     .grid {
       display: grid;
+      gap: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
 
@@ -52,148 +85,338 @@
       font-weight: 700;
       margin-bottom: 8px;
       font-size: 14px;
+      color: #243041;
     }
 
     input,
     select,
     button {
       width: 100%;
-      border-radius: 12px;
-      border: 1px solid #d1d5db;
-      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid #d8dee8;
+      padding: 15px 16px;
       font-size: 16px;
+      background: #fff;
+      color: var(--text);
     }
 
     input:focus,
     select:focus {
       outline: none;
       border-color: #111827;
+      box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.05);
     }
 
     button {
       border: none;
-      background: #111827;
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
       color: #fff;
       font-weight: 700;
       cursor: pointer;
       margin-top: 8px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
     }
 
     button:hover {
-      opacity: 0.96;
+      opacity: 0.97;
+      transform: translateY(-1px);
     }
 
-    .resultado {
-      margin-top: 24px;
-      padding: 22px;
-      border-radius: 14px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      display: none;
-    }
-
-    .headline {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1.2;
-      margin: 0 0 18px;
-    }
-
-    .headline.critico {
-      color: #991b1b;
-    }
-
-    .headline.atencao {
-      color: #b45309;
-    }
-
-    .headline.saudavel {
-      color: #065f46;
-    }
-
-    .headline.acima {
-      color: #1d4ed8;
-    }
-
-    .linha {
-      margin: 10px 0;
-      font-size: 17px;
-      line-height: 1.5;
-    }
-
-    .bloco {
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .bloco-setorial {
-      margin-top: 18px;
-      padding: 16px;
-      border-radius: 12px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-    }
-
-    .bloco-setorial-titulo {
-      margin: 0 0 10px;
-      font-size: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: #374151;
-      letter-spacing: 0.3px;
-    }
-
-    .fonte {
-      margin-top: 18px;
-      font-size: 13px;
-      color: #6b7280;
-      line-height: 1.55;
-    }
-
-    .disclaimer {
-      margin-top: 14px;
-      font-size: 12px;
-      color: #6b7280;
-      line-height: 1.6;
+    .full {
+      grid-column: 1 / -1;
     }
 
     .erro {
       margin-top: 14px;
-      color: #b91c1c;
+      color: var(--danger);
       font-weight: 700;
       display: none;
     }
 
+    .resultado {
+      margin-top: 28px;
+      display: none;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero-main,
+    .hero-side,
+    .box,
+    .mini-card,
+    .context-box,
+    .disclaimer-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 8px 18px rgba(16, 24, 40, 0.04);
+    }
+
+    .hero-main {
+      padding: 24px;
+    }
+
+    .hero-side {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .badge {
-      display: inline-block;
-      margin-bottom: 14px;
-      padding: 8px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 9px 13px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
       text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
     }
 
     .badge.critico {
-      background: #fee2e2;
-      color: #991b1b;
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .badge.critico .dot {
+      background: var(--danger);
     }
 
     .badge.atencao {
-      background: #fef3c7;
-      color: #b45309;
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .badge.atencao .dot {
+      background: var(--warning);
     }
 
     .badge.saudavel {
-      background: #dcfce7;
-      color: #166534;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .badge.saudavel .dot {
+      background: var(--success);
     }
 
     .badge.acima {
-      background: #dbeafe;
-      color: #1d4ed8;
+      background: var(--info-bg);
+      color: var(--info);
+    }
+
+    .badge.acima .dot {
+      background: var(--info);
+    }
+
+    .headline {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .headline.critico { color: var(--danger); }
+    .headline.atencao { color: var(--warning); }
+    .headline.saudavel { color: var(--success); }
+    .headline.acima { color: var(--info); }
+
+    .hero-text {
+      margin: 0;
+      color: #425466;
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 95%;
+    }
+
+    .hero-side-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.4px;
+      margin-bottom: 8px;
+    }
+
+    .hero-side-value {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .hero-side-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .mini-card {
+      padding: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+    }
+
+    .mini-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 10px;
+    }
+
+    .mini-value {
+      font-size: 30px;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .mini-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .box {
+      padding: 22px;
+    }
+
+    .box-title {
+      margin: 0 0 16px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #243041;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .compare-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .compare-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #edf1f5;
+    }
+
+    .compare-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .compare-name {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .compare-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--dark);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .context-box {
+      padding: 22px;
+      margin-bottom: 16px;
+      background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
+    }
+
+    .context-title {
+      margin: 0 0 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #243041;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .context-text,
+    .context-alert {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.65;
+      color: #425466;
+    }
+
+    .context-alert {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #edf1f5;
+    }
+
+    .fonte {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .disclaimer-box {
+      padding: 18px 20px;
+      background: #fbfcfe;
+    }
+
+    .disclaimer {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .metrics-grid,
+      .compare-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side-value {
+        font-size: 34px;
+      }
     }
 
     @media (max-width: 640px) {
@@ -203,6 +426,7 @@
 
       .card {
         padding: 20px;
+        border-radius: 18px;
       }
 
       h1 {
@@ -211,6 +435,19 @@
 
       .headline {
         font-size: 24px;
+      }
+
+      .mini-value {
+        font-size: 26px;
+      }
+
+      .hero-main,
+      .hero-side,
+      .box,
+      .mini-card,
+      .context-box,
+      .disclaimer-box {
+        border-radius: 16px;
       }
     }
   </style>
@@ -224,36 +461,38 @@
       </p>
 
       <div class="grid">
-        <div>
-          <label for="precoAtual">Preço atual</label>
-          <input id="precoAtual" type="text" inputmode="decimal" placeholder="R$ 0,00" />
+        <div class="form-grid">
+          <div>
+            <label for="precoAtual">Preço atual</label>
+            <input id="precoAtual" type="text" inputmode="decimal" placeholder="R$ 0,00" />
+          </div>
+
+          <div>
+            <label for="custoUnitario">Custo por unidade (R$)</label>
+            <input id="custoUnitario" type="text" inputmode="decimal" placeholder="R$ 0,00" />
+          </div>
+
+          <div>
+            <label for="volume">Volume mensal</label>
+            <input id="volume" type="text" inputmode="numeric" placeholder="0" />
+          </div>
+
+          <div>
+            <label for="segmento">Segmento</label>
+            <select id="segmento">
+              <option value="">Selecione</option>
+              <option value="mercado_mercearia">Mercado / Mercearia</option>
+              <option value="roupas_moda">Roupas / Moda</option>
+              <option value="cosmeticos_acessorios">Cosméticos / Acessórios</option>
+              <option value="pet_shop">Pets / Pet shop</option>
+              <option value="agencia_consultoria">Agência / Consultoria</option>
+              <option value="salao_estetica">Salão de beleza / Estética</option>
+              <option value="industria">Indústria</option>
+            </select>
+          </div>
         </div>
 
-        <div>
-          <label for="custoUnitario">Custo por unidade (R$)</label>
-          <input id="custoUnitario" type="text" inputmode="decimal" placeholder="R$ 0,00" />
-        </div>
-
-        <div>
-          <label for="volume">Volume mensal</label>
-          <input id="volume" type="text" inputmode="numeric" placeholder="0" />
-        </div>
-
-        <div>
-          <label for="segmento">Segmento</label>
-          <select id="segmento">
-            <option value="">Selecione</option>
-            <option value="mercado_mercearia">Mercado / Mercearia</option>
-            <option value="roupas_moda">Roupas / Moda</option>
-            <option value="cosmeticos_acessorios">Cosméticos / Acessórios</option>
-            <option value="pet_shop">Pets / Pet shop</option>
-            <option value="agencia_consultoria">Agência / Consultoria</option>
-            <option value="salao_estetica">Salão de beleza / Estética</option>
-            <option value="industria">Indústria</option>
-          </select>
-        </div>
-
-        <div>
+        <div class="full">
           <button onclick="calcularDiagnostico()">Gerar diagnóstico</button>
         </div>
       </div>
@@ -360,10 +599,7 @@
 
     function parseMoedaBR(valor) {
       if (!valor) return 0;
-      const limpo = valor
-        .replace(/[^\d,]/g, "")
-        .replace(/\./g, "")
-        .replace(",", ".");
+      const limpo = valor.replace(/[^\d,]/g, "").replace(/\./g, "").replace(",", ".");
       return Number(limpo) || 0;
     }
 
@@ -420,6 +656,41 @@
       return "acima";
     }
 
+    function badgeClass(nivel) {
+      return nivel;
+    }
+
+    function headlineClass(nivel) {
+      return nivel;
+    }
+
+    function montarBadge(nivel) {
+      const textos = {
+        critico: "Diagnóstico crítico",
+        atencao: "Diagnóstico de atenção",
+        saudavel: "Diagnóstico saudável",
+        acima: "Acima da referência"
+      };
+
+      return `
+        <span class="badge ${badgeClass(nivel)}">
+          <span class="dot"></span>
+          ${textos[nivel]}
+        </span>
+      `;
+    }
+
+    function montarContextoSetorial(referencia) {
+      return `
+        <div class="context-box">
+          <h3 class="context-title">Contexto do seu segmento</h3>
+          <p class="context-text">${referencia.leituraSetorial}</p>
+          <p class="context-alert"><strong>Ponto de atenção:</strong> ${referencia.atencaoSetorial}</p>
+          <div class="fonte">${referencia.fonteHtml}</div>
+        </div>
+      `;
+    }
+
     const precoInput = document.getElementById("precoAtual");
     const custoInput = document.getElementById("custoUnitario");
     const volumeInput = document.getElementById("volume");
@@ -435,16 +706,6 @@
     volumeInput.addEventListener("input", (e) => {
       e.target.value = formatarInteiroInput(e.target.value);
     });
-
-    function montarBlocoSetorial(referencia) {
-      return `
-        <div class="bloco-setorial">
-          <div class="bloco-setorial-titulo">Contexto do seu segmento</div>
-          <div class="linha">${referencia.leituraSetorial}</div>
-          <div class="linha"><strong>Ponto de atenção:</strong> ${referencia.atencaoSetorial}</div>
-        </div>
-      `;
-    }
 
     function calcularDiagnostico() {
       const precoAtual = parseMoedaBR(precoInput.value);
@@ -465,29 +726,69 @@
 
       const referencia = referencias[segmentoKey];
 
+      const faturamentoAtual = precoAtual * volumeMensal;
+      const lucroAtualPorUnidade = precoAtual - custoUnitario;
+
       if (custoUnitario >= precoAtual) {
-        const lucroAtualPorUnidade = precoAtual - custoUnitario;
+        const nivel = "critico";
 
         resultado.innerHTML = `
-          <span class="badge critico">Diagnóstico crítico</span>
-          <div class="headline critico">Seu preço atual não cobre adequadamente o custo unitário.</div>
-          <div class="linha">Pelo recorte informado, sua operação não está preservando margem bruta suficiente.</div>
-          <div class="linha">Preço atual: <strong>${moeda2Casas(precoAtual)}</strong></div>
-          <div class="linha">Custo por unidade: <strong>${moeda2Casas(custoUnitario)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
+          <div class="hero">
+            <div class="hero-main">
+              ${montarBadge(nivel)}
+              <h2 class="headline ${headlineClass(nivel)}">Seu preço atual não cobre adequadamente o custo unitário.</h2>
+              <p class="hero-text">
+                Antes de comparar sua operação com a referência do segmento, o primeiro ajuste precisa ser recuperar margem mínima sobre cada venda.
+              </p>
+            </div>
 
-          <div class="bloco">
-            <div class="linha"><strong>Leitura rápida:</strong> antes de comparar seu negócio com a referência do segmento, o primeiro ajuste precisa ser recuperar margem mínima sobre cada venda.</div>
+            <div class="hero-side">
+              <div class="hero-side-label">Lucro bruto por unidade atual</div>
+              <div class="hero-side-value">${moeda2Casas(lucroAtualPorUnidade)}</div>
+              <div class="hero-side-sub">Neste cenário, sua operação não está preservando margem suficiente por venda.</div>
+            </div>
           </div>
 
-          ${montarBlocoSetorial(referencia)}
+          <div class="compare-grid">
+            <div class="box">
+              <h3 class="box-title">Situação atual</h3>
+              <div class="compare-list">
+                <div class="compare-row">
+                  <div class="compare-name">Preço atual</div>
+                  <div class="compare-value">${moeda2Casas(precoAtual)}</div>
+                </div>
+                <div class="compare-row">
+                  <div class="compare-name">Custo por unidade</div>
+                  <div class="compare-value">${moeda2Casas(custoUnitario)}</div>
+                </div>
+                <div class="compare-row">
+                  <div class="compare-name">Lucro bruto por unidade</div>
+                  <div class="compare-value">${moeda2Casas(lucroAtualPorUnidade)}</div>
+                </div>
+              </div>
+            </div>
 
-          <div class="fonte">
-            ${referencia.fonteHtml}
+            <div class="box">
+              <h3 class="box-title">Leitura rápida</h3>
+              <div class="compare-list">
+                <div class="compare-row">
+                  <div class="compare-name">Status</div>
+                  <div class="compare-value">Crítico</div>
+                </div>
+                <div class="compare-row">
+                  <div class="compare-name">Prioridade</div>
+                  <div class="compare-value">Rever preço</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="disclaimer">
-            <strong>Disclaimer:</strong> este diagnóstico é uma análise inicial, baseada exclusivamente nas informações preenchidas e em referências médias de mercado. Não considera custos fixos, regime tributário, mix de produtos ou serviços, concorrência local, descontos, canais de venda, sazonalidade, elasticidade de demanda, inadimplência, frete, comissões ou estratégia comercial. Os resultados devem ser interpretados como indicativos e não substituem uma análise financeira completa do negócio.
+          ${montarContextoSetorial(referencia)}
+
+          <div class="disclaimer-box">
+            <p class="disclaimer">
+              <strong>Disclaimer:</strong> este diagnóstico é uma análise inicial, baseada exclusivamente nas informações preenchidas e em referências médias de mercado. Não considera custos fixos, regime tributário, mix de produtos ou serviços, concorrência local, descontos, canais de venda, sazonalidade, elasticidade de demanda, inadimplência, frete, comissões ou estratégia comercial. Os resultados devem ser interpretados como indicativos e não substituem uma análise financeira completa do negócio.
+            </p>
           </div>
         `;
         resultado.style.display = "block";
@@ -496,7 +797,6 @@
 
       const margemAtual = (precoAtual - custoUnitario) / precoAtual;
       const lucroBrutoAtual = (precoAtual - custoUnitario) * volumeMensal;
-      const lucroAtualPorUnidade = precoAtual - custoUnitario;
 
       const precoReferencia = custoUnitario / (1 - referencia.margem);
       const lucroBrutoReferencia = (precoReferencia - custoUnitario) * volumeMensal;
@@ -505,8 +805,6 @@
       const oportunidadeLucro = Math.max(0, lucroBrutoReferencia - lucroBrutoAtual);
       const anualizado = oportunidadeLucro * 12;
       const gapPrecoUnitario = Math.max(0, precoReferencia - precoAtual);
-
-      const faturamentoAtual = precoAtual * volumeMensal;
       const impactoSobreFaturamento = faturamentoAtual > 0 ? oportunidadeLucro / faturamentoAtual : 0;
 
       const nivel = classificarDiagnostico(
@@ -515,116 +813,151 @@
         impactoSobreFaturamento
       );
 
-      let html = "";
+      let titulo = "";
+      let subtitulo = "";
+      let destaque = "";
+      let destaqueSub = "";
 
       if (nivel === "critico") {
-        html = `
-          <span class="badge critico">Diagnóstico crítico</span>
-          <div class="headline critico">Sua margem está muito abaixo da referência do seu segmento — há forte indício de subprecificação.</div>
-
-          <div class="linha">
-            Com base nos dados informados, sua precificação atual está distante do padrão de margem normalmente observado no seu segmento.
-          </div>
-
-          <div class="linha">
-            Isso indica que parte relevante do valor que sua operação entrega pode não estar sendo convertida em margem bruta.
-          </div>
-
-          <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
-          <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
-          <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
-          <div class="linha">Preço atual: <strong>${moeda2Casas(precoAtual)}</strong></div>
-          <div class="linha">Preço de referência estimado: <strong>${moeda2Casas(precoReferencia)}</strong></div>
-          <div class="linha">Gap estimado por unidade: <strong>${moeda2Casas(gapPrecoUnitario)}</strong></div>
-          <div class="linha">Impacto sobre o faturamento: <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong></div>
-
-          <div class="bloco">
-            <div class="linha"><strong>Oportunidade de lucro adicional:</strong> <strong>${moedaSemCentavos(oportunidadeLucro)} por mês</strong></div>
-            <div class="linha">Hoje, sua operação está deixando aproximadamente <strong>${moedaSemCentavos(oportunidadeLucro)}</strong> por mês na mesa.</div>
-            <div class="linha">Isso representa cerca de <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong> do seu faturamento atual.</div>
-            <div class="linha">Em 12 meses, isso representa cerca de <strong>${moedaSemCentavos(anualizado)}</strong> em potencial de ganho não capturado.</div>
-            <div class="linha">Mantido o volume atual, uma aproximação gradual do preço à referência estimada pode capturar parte relevante dessa margem adicional.</div>
-          </div>
-        `;
+        titulo = "Sua margem está muito abaixo da referência do seu segmento.";
+        subtitulo = "Há forte indício de subprecificação, com impacto relevante na capacidade de captura de resultado da operação.";
+        destaque = moedaSemCentavos(oportunidadeLucro);
+        destaqueSub = "de oportunidade de lucro adicional por mês";
       } else if (nivel === "atencao") {
-        html = `
-          <span class="badge atencao">Diagnóstico de atenção</span>
-          <div class="headline atencao">Sua margem está abaixo da referência do segmento, mas relativamente próxima.</div>
-
-          <div class="linha">
-            Seu preço atual parece capturar parte importante do valor da operação, mas ainda há espaço para melhorar margem sem estar, necessariamente, em uma situação crítica.
-          </div>
-
-          <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
-          <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
-          <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
-          <div class="linha">Preço atual: <strong>${moeda2Casas(precoAtual)}</strong></div>
-          <div class="linha">Preço de referência estimado: <strong>${moeda2Casas(precoReferencia)}</strong></div>
-          <div class="linha">Gap estimado por unidade: <strong>${moeda2Casas(gapPrecoUnitario)}</strong></div>
-          <div class="linha">Impacto sobre o faturamento: <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong></div>
-
-          <div class="bloco">
-            <div class="linha"><strong>Oportunidade de lucro adicional:</strong> <strong>${moedaSemCentavos(oportunidadeLucro)} por mês</strong></div>
-            <div class="linha">Pequenos ajustes de preço, posicionamento ou percepção de valor já podem gerar ganho relevante.</div>
-            <div class="linha">Isso representa cerca de <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong> do seu faturamento atual.</div>
-            <div class="linha">Mantido o volume atual, essa diferença representa cerca de <strong>${moedaSemCentavos(anualizado)}</strong> por ano em margem bruta potencial.</div>
-          </div>
-        `;
+        titulo = "Sua margem está abaixo da referência do segmento, mas relativamente próxima.";
+        subtitulo = "Seu preço atual já captura parte do valor da operação, mas ainda existe espaço concreto para melhorar a margem.";
+        destaque = moedaSemCentavos(oportunidadeLucro);
+        destaqueSub = "de oportunidade de lucro adicional por mês";
       } else if (nivel === "saudavel") {
-        html = `
-          <span class="badge saudavel">Diagnóstico saudável</span>
-          <div class="headline saudavel">Sua precificação está alinhada com a referência do seu segmento.</div>
+        titulo = "Sua precificação está alinhada com a referência do seu segmento.";
+        subtitulo = "Neste recorte, não há indicação clara de perda relevante de margem frente à referência utilizada.";
+        destaque = percentualSemDecimal(margemAtual);
+        destaqueSub = "de margem bruta atual";
+      } else {
+        titulo = "Sua margem está acima da referência do seu segmento.";
+        subtitulo = "Seu preço atual indica uma captura de margem superior à referência usada para o segmento neste cenário.";
+        destaque = percentualSemDecimal(margemAtual);
+        destaqueSub = "de margem bruta atual";
+      }
 
-          <div class="linha">
-            Com base nos dados preenchidos, sua margem está dentro da faixa esperada para o segmento selecionado.
+      let html = `
+        <div class="hero">
+          <div class="hero-main">
+            ${montarBadge(nivel)}
+            <h2 class="headline ${headlineClass(nivel)}">${titulo}</h2>
+            <p class="hero-text">${subtitulo}</p>
           </div>
 
-          <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
-          <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
-          <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
+          <div class="hero-side">
+            <div class="hero-side-label">Indicador principal</div>
+            <div class="hero-side-value">${destaque}</div>
+            <div class="hero-side-sub">${destaqueSub}</div>
+          </div>
+        </div>
+      `;
 
-          <div class="bloco">
-            <div class="linha"><strong>Leitura rápida:</strong> neste recorte, não há indicação clara de perda relevante de margem frente à referência utilizada.</div>
-            <div class="linha">O próximo foco tende a estar menos em preço e mais em consistência comercial, demanda e eficiência operacional.</div>
+      if (nivel === "critico" || nivel === "atencao") {
+        html += `
+          <div class="metrics-grid">
+            <div class="mini-card">
+              <div class="mini-label">Oportunidade mensal</div>
+              <div class="mini-value">${moedaSemCentavos(oportunidadeLucro)}</div>
+              <div class="mini-desc">Margem adicional estimada que sua operação pode capturar por mês.</div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-label">Impacto no faturamento</div>
+              <div class="mini-value">${percentualSemDecimal(impactoSobreFaturamento)}</div>
+              <div class="mini-desc">Parcela estimada do faturamento atual que hoje não está sendo convertida em margem.</div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-label">Gap por unidade</div>
+              <div class="mini-value">${moeda2Casas(gapPrecoUnitario)}</div>
+              <div class="mini-desc">Diferença estimada entre seu preço atual e o preço de referência do segmento.</div>
+            </div>
           </div>
         `;
       } else {
-        html = `
-          <span class="badge acima">Acima da referência</span>
-          <div class="headline acima">Sua margem está acima da referência do seu segmento.</div>
+        html += `
+          <div class="metrics-grid">
+            <div class="mini-card">
+              <div class="mini-label">Margem atual</div>
+              <div class="mini-value">${percentualSemDecimal(margemAtual)}</div>
+              <div class="mini-desc">Margem bruta calculada com base no preço e custo informados.</div>
+            </div>
 
-          <div class="linha">
-            Seu preço atual, neste recorte simplificado, indica uma captura de margem superior à referência usada para o segmento.
-          </div>
+            <div class="mini-card">
+              <div class="mini-label">Lucro bruto mensal</div>
+              <div class="mini-value">${moedaSemCentavos(lucroBrutoAtual)}</div>
+              <div class="mini-desc">Resultado bruto mensal estimado com o volume atual informado.</div>
+            </div>
 
-          <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
-          <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
-          <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
-
-          <div class="bloco">
-            <div class="linha"><strong>Leitura rápida:</strong> isso sugere uma precificação forte neste cenário.</div>
-            <div class="linha">O ponto de atenção aqui não é capturar mais margem a qualquer custo, mas sustentar volume, percepção de valor e competitividade.</div>
+            <div class="mini-card">
+              <div class="mini-label">Referência do segmento</div>
+              <div class="mini-value">${percentualSemDecimal(referencia.margem)}</div>
+              <div class="mini-desc">Margem usada como base comparativa para o segmento selecionado.</div>
+            </div>
           </div>
         `;
       }
 
       html += `
-        ${montarBlocoSetorial(referencia)}
+        <div class="compare-grid">
+          <div class="box">
+            <h3 class="box-title">Seu cenário atual</h3>
+            <div class="compare-list">
+              <div class="compare-row">
+                <div class="compare-name">Margem bruta atual</div>
+                <div class="compare-value">${percentualSemDecimal(margemAtual)}</div>
+              </div>
+              <div class="compare-row">
+                <div class="compare-name">Lucro/margem bruta atual</div>
+                <div class="compare-value">${moedaSemCentavos(lucroBrutoAtual)}</div>
+              </div>
+              <div class="compare-row">
+                <div class="compare-name">Lucro bruto por unidade atual</div>
+                <div class="compare-value">${moeda2Casas(lucroAtualPorUnidade)}</div>
+              </div>
+              <div class="compare-row">
+                <div class="compare-name">Preço atual</div>
+                <div class="compare-value">${moeda2Casas(precoAtual)}</div>
+              </div>
+            </div>
+          </div>
 
-        <div class="fonte">
-          ${referencia.fonteHtml}
+          <div class="box">
+            <h3 class="box-title">Referência do segmento</h3>
+            <div class="compare-list">
+              <div class="compare-row">
+                <div class="compare-name">Margem de referência</div>
+                <div class="compare-value">${percentualSemDecimal(referencia.margem)}</div>
+              </div>
+              <div class="compare-row">
+                <div class="compare-name">Lucro bruto por unidade na referência</div>
+                <div class="compare-value">${moeda2Casas(lucroReferenciaPorUnidade)}</div>
+              </div>
+              <div class="compare-row">
+                <div class="compare-name">Preço de referência estimado</div>
+                <div class="compare-value">${moeda2Casas(precoReferencia)}</div>
+              </div>
+              ${nivel === "critico" || nivel === "atencao" ? `
+              <div class="compare-row">
+                <div class="compare-name">Potencial anual estimado</div>
+                <div class="compare-value">${moedaSemCentavos(anualizado)}</div>
+              </div>` : ""}
+            </div>
+          </div>
         </div>
+      `;
 
-        <div class="disclaimer">
-          <strong>Disclaimer:</strong> este diagnóstico é uma análise inicial, baseada exclusivamente nas informações preenchidas e em referências médias de mercado. Não considera custos fixos, regime tributário, mix de produtos ou serviços, concorrência local, descontos, canais de venda, sazonalidade, elasticidade de demanda, inadimplência, frete, comissões ou estratégia comercial. Os resultados devem ser interpretados como indicativos e não substituem uma análise financeira completa do negócio.
+      html += montarContextoSetorial(referencia);
+
+      html += `
+        <div class="disclaimer-box">
+          <p class="disclaimer">
+            <strong>Disclaimer:</strong> este diagnóstico é uma análise inicial, baseada exclusivamente nas informações preenchidas e em referências médias de mercado. Não considera custos fixos, regime tributário, mix de produtos ou serviços, concorrência local, descontos, canais de venda, sazonalidade, elasticidade de demanda, inadimplência, frete, comissões ou estratégia comercial. Os resultados devem ser interpretados como indicativos e não substituem uma análise financeira completa do negócio.
+          </p>
         </div>
       `;
 
