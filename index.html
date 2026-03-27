@@ -1,64 +1,444 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Diagnóstico de Preço</title>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico de Precificação</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f7fb;
+      color: #1f2937;
+      margin: 0;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 30px;
+      margin: 0 0 8px;
+    }
+
+    .sub {
+      color: #6b7280;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 700;
+    }
+
+    input, select, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      background: #111827;
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.95;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .error {
+      display: none;
+      margin-top: 16px;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 24px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .result h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .row {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .impact {
+      margin: 18px 0;
+      padding: 16px;
+      border-radius: 12px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      font-size: 24px;
+      font-weight: 800;
+      color: #9a3412;
+    }
+
+    .diagnosis {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      line-height: 1.6;
+    }
+
+    .source-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-yellow { background: #fef3c7; color: #92400e; }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <div class="card">
+      <h1>Descubra se você está perdendo dinheiro no seu preço</h1>
+      <div class="sub">
+        Preencha os dados e veja, em segundos, se sua margem está abaixo do esperado para o seu tipo de negócio.
+      </div>
 
-<h2>Descubra em 30 segundos quanto você está perdendo</h2>
+      <label for="segmento">Segmento do negócio</label>
+      <select id="segmento">
+        <option value="mercado">Mercado / mercearia</option>
+        <option value="restaurante">Restaurante / lanchonete / café</option>
+        <option value="roupa">Loja de roupas / moda</option>
+        <option value="cosmeticos">Loja de cosméticos / acessórios</option>
+        <option value="servico">Serviços em geral</option>
+        <option value="agencia">Agência / consultoria</option>
+        <option value="estetica">Salão / estética</option>
+        <option value="industria">Indústria / fabricação</option>
+        <option value="misto">Produto + serviço</option>
+      </select>
+      <div class="small">
+        O benchmark abaixo usa referência ampla de mercado e SEBRAE quando disponível. Onde não há faixa pública fechada por nicho, foi criada uma faixa inicial pragmática para MVP.
+      </div>
 
-<input id="preco" type="number" placeholder="Preço de venda"><br><br>
-<input id="custo" type="number" placeholder="Custo por unidade"><br><br>
-<input id="quantidade" type="number" placeholder="Quantidade por mês"><br><br>
+      <label for="preco">Preço atual (R$)</label>
+      <input type="number" id="preco" step="0.01" min="0" placeholder="Ex: 80" />
 
-<select id="segmento">
-  <option value="">Selecione seu segmento</option>
-  <option value="servico">Serviço</option>
-  <option value="comercio">Comércio</option>
-  <option value="industria">Indústria</option>
-</select><br><br>
+      <label for="custo">Custo por unidade (R$)</label>
+      <input type="number" id="custo" step="0.01" min="0" placeholder="Ex: 50" />
 
-<button onclick="calcular()">Calcular</button>
+      <label for="quantidade">Quantidade vendida por mês</label>
+      <input type="number" id="quantidade" step="1" min="1" placeholder="Ex: 100" />
 
-<h3 id="resultado"></h3>
+      <button onclick="calcular()">Ver diagnóstico</button>
 
-<script>
-function calcular() {
-  let preco = parseFloat(document.getElementById('preco').value);
-  let custo = parseFloat(document.getElementById('custo').value);
-  let quantidade = parseFloat(document.getElementById('quantidade').value);
-  let segmento = document.getElementById('segmento').value;
+      <div id="error" class="error"></div>
 
-  if (!preco || !custo || !quantidade || !segmento) {
-    document.getElementById('resultado').innerHTML = "Preencha todos os campos.";
-    return;
-  }
+      <div id="result" class="result">
+        <h2>Seu diagnóstico</h2>
 
-  let margens = {
-    servico: 0.30,
-    comercio: 0.20,
-    industria: 0.15
-  };
+        <div class="row" id="rowSegmento"></div>
+        <div class="row" id="rowMargem"></div>
+        <div class="row" id="rowLucroAtual"></div>
+        <div class="row" id="rowBenchmark"></div>
 
-  let margemTarget = margens[segmento];
+        <div class="impact" id="rowImpacto"></div>
 
-  let margem = (preco - custo) / preco;
-  let lucro = (preco - custo) * quantidade;
+        <div class="row" id="rowPrecoIdeal"></div>
+        <div class="row" id="rowLucroPotencial"></div>
+        <div class="row" id="rowDiferenca"></div>
 
-  let precoIdeal = custo / (1 - margemTarget);
-  let lucroIdeal = (precoIdeal - custo) * quantidade;
+        <div class="diagnosis" id="rowDiagnostico"></div>
+        <div class="source-box" id="rowFonte"></div>
+      </div>
+    </div>
+  </div>
 
-  let perda = lucroIdeal - lucro;
+  <script>
+    const benchmarks = {
+      mercado: {
+        nome: "Mercado / mercearia",
+        margemMin: 5,
+        margemIdeal: 8,
+        margemMax: 12,
+        referencia: "SEBRAE (comércio 10%–15%) + ajuste conservador para mercado/mercearia",
+        observacao: "Mercados tendem a operar com giro alto e margem mais apertada do que varejo comum.",
+        confianca: "Média"
+      },
+      restaurante: {
+        nome: "Restaurante / lanchonete / café",
+        margemMin: 20,
+        margemIdeal: 25,
+        margemMax: 40,
+        referencia: "SEBRAE (alimentos preparados 20%–40%)",
+        observacao: "Pode variar conforme CMV, ticket médio, delivery e nível de operação.",
+        confianca: "Alta"
+      },
+      roupa: {
+        nome: "Loja de roupas / moda",
+        margemMin: 25,
+        margemIdeal: 35,
+        margemMax: 50,
+        referencia: "SEBRAE (varejo de roupas com exemplo de margem bruta de 60%) + faixa prudente para MVP",
+        observacao: "Moda costuma operar com margem superior ao varejo tradicional.",
+        confianca: "Média"
+      },
+      cosmeticos: {
+        nome: "Loja de cosméticos / acessórios",
+        margemMin: 20,
+        margemIdeal: 30,
+        margemMax: 45,
+        referencia: "SEBRAE (comércio 10%–15%) + ajuste para varejo de maior valor agregado",
+        observacao: "Faixa inicial para nichos com percepção de valor maior que varejo básico.",
+        confianca: "Baixa/Média"
+      },
+      servico: {
+        nome: "Serviços em geral",
+        margemMin: 20,
+        margemIdeal: 25,
+        margemMax: 35,
+        referencia: "SEBRAE (serviços 20%) + faixa operacional de MVP",
+        observacao: "Boa referência para serviços mais simples e menos especializados.",
+        confianca: "Alta"
+      },
+      agencia: {
+        nome: "Agência / consultoria",
+        margemMin: 25,
+        margemIdeal: 35,
+        margemMax: 50,
+        referencia: "SEBRAE (serviços 20%) + ajuste para serviço de maior valor agregado",
+        observacao: "Consultoria e agência costumam capturar margem maior quando o valor percebido é alto.",
+        confianca: "Média"
+      },
+      estetica: {
+        nome: "Salão / estética",
+        margemMin: 15,
+        margemIdeal: 25,
+        margemMax: 35,
+        referencia: "SEBRAE (conteúdo de gestão para salão) + hipótese MVP",
+        observacao: "Segmento mistura serviço, insumo, comissão e recorrência, então a faixa é mais sensível.",
+        confianca: "Baixa/Média"
+      },
+      industria: {
+        nome: "Indústria / fabricação",
+        margemMin: 6,
+        margemIdeal: 8,
+        margemMax: 12,
+        referencia: "SEBRAE (indústria 6%–8%) + expansão leve de teto para leitura operacional",
+        observacao: "Faixa típica de negócio produtivo com escala e margem mais comprimida.",
+        confianca: "Alta"
+      },
+      misto: {
+        nome: "Produto + serviço",
+        margemMin: 15,
+        margemIdeal: 22,
+        margemMax: 30,
+        referencia: "Combinação de referências amplas de comércio e serviços do SEBRAE",
+        observacao: "Bom para oficinas, manutenção, clínicas com venda, assistência técnica e similares.",
+        confianca: "Média"
+      }
+    };
 
-  document.getElementById('resultado').innerHTML = `
-    Margem atual: ${(margem * 100).toFixed(1)}% <br><br>
-    Lucro mensal: R$ ${lucro.toFixed(2)} <br><br>
-    Preço ideal no seu segmento: R$ ${precoIdeal.toFixed(2)} <br><br>
-    <strong>Você está perdendo R$ ${perda.toFixed(2)} TODOS OS MESES.</strong>
-  `;
-}
-</script>
+    function brl(valor) {
+      return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      });
+    }
 
+    function pct(valor) {
+      return valor.toLocaleString("pt-BR", {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      }) + "%";
+    }
+
+    function badge(texto, classe) {
+      return `<span class="badge ${classe}">${texto}</span>`;
+    }
+
+    function classificarMargem(margem, ref) {
+      if (margem < ref.margemMin) {
+        return {
+          status: "Crítica",
+          badgeClass: "badge-red",
+          texto: "Sua margem está abaixo do mínimo saudável para esse segmento."
+        };
+      }
+
+      if (margem < ref.margemIdeal) {
+        return {
+          status: "Atenção",
+          badgeClass: "badge-yellow",
+          texto: "Sua margem está acima do mínimo, mas ainda abaixo do ideal."
+        };
+      }
+
+      if (margem <= ref.margemMax) {
+        return {
+          status: "Saudável",
+          badgeClass: "badge-green",
+          texto: "Sua margem está em uma faixa saudável para esse segmento."
+        };
+      }
+
+      return {
+        status: "Acima da média",
+        badgeClass: "badge-blue",
+        texto: "Sua margem está acima da faixa média de referência para esse segmento."
+      };
+    }
+
+    function gerarRecomendacao(margemAtual, ref, precoAtual, precoIdeal, diferencaMensal) {
+      if (margemAtual < ref.margemMin) {
+        return `Seu preço parece baixo para o seu segmento. Prioridade: revisar preço agora.`;
+      }
+
+      if (margemAtual < ref.margemIdeal) {
+        return `Há espaço claro para melhorar margem. Um ajuste de preço pode aumentar seu lucro sem exigir mais vendas.`;
+      }
+
+      if (margemAtual <= ref.margemMax) {
+        return `Seu preço parece bem posicionado. O foco agora é monitorar custos, concorrência e volume vendido.`;
+      }
+
+      if (precoIdeal < precoAtual) {
+        return `Seu preço atual já supera a margem de referência. Antes de subir mais, avalie elasticidade, concorrência e conversão.`;
+      }
+
+      return `Sua margem está acima da média. Isso pode ser ótimo, mas vale validar se o mercado aceita esse posicionamento.`;
+    }
+
+    function calcular() {
+      const segmento = document.getElementById("segmento").value;
+      const preco = parseFloat(document.getElementById("preco").value);
+      const custo = parseFloat(document.getElementById("custo").value);
+      const quantidade = parseFloat(document.getElementById("quantidade").value);
+
+      const error = document.getElementById("error");
+      const result = document.getElementById("result");
+
+      error.style.display = "none";
+      result.style.display = "none";
+      error.innerHTML = "";
+
+      if (isNaN(preco) || isNaN(custo) || isNaN(quantidade) || preco <= 0 || custo < 0 || quantidade <= 0) {
+        error.innerHTML = "Preencha todos os campos com valores válidos.";
+        error.style.display = "block";
+        return;
+      }
+
+      if (preco <= custo) {
+        error.innerHTML = "Seu preço atual está igual ou abaixo do custo. Nesse cenário, você não tem margem.";
+        error.style.display = "block";
+        return;
+      }
+
+      const ref = benchmarks[segmento];
+
+      const margemAtual = ((preco - custo) / preco) * 100;
+      const lucroUnitAtual = preco - custo;
+      const lucroMensalAtual = lucroUnitAtual * quantidade;
+
+      const precoIdeal = custo / (1 - (ref.margemIdeal / 100));
+      const lucroUnitIdeal = precoIdeal - custo;
+      const lucroMensalIdeal = lucroUnitIdeal * quantidade;
+
+      const diferencaMensal = lucroMensalIdeal - lucroMensalAtual;
+      const aumentoPrecoPct = ((precoIdeal - preco) / preco) * 100;
+
+      const classe = classificarMargem(margemAtual, ref);
+      const recomendacao = gerarRecomendacao(margemAtual, ref, preco, precoIdeal, diferencaMensal);
+
+      document.getElementById("rowSegmento").innerHTML =
+        `<strong>Segmento:</strong> ${ref.nome} ${badge(classe.status, classe.badgeClass)}`;
+
+      document.getElementById("rowMargem").innerHTML =
+        `<strong>Margem atual:</strong> ${pct(margemAtual)}`;
+
+      document.getElementById("rowLucroAtual").innerHTML =
+        `<strong>Lucro mensal atual:</strong> ${brl(lucroMensalAtual)}`;
+
+      document.getElementById("rowBenchmark").innerHTML =
+        `<strong>Faixa de referência:</strong> ${ref.margemMin}% a ${ref.margemMax}% (ideal usada no cálculo: ${ref.margemIdeal}%)`;
+
+      if (diferencaMensal > 0) {
+        document.getElementById("rowImpacto").innerHTML =
+          `Você está deixando ${brl(diferencaMensal)} por mês na mesa.`;
+      } else {
+        document.getElementById("rowImpacto").innerHTML =
+          `Seu preço atual já está no nível ou acima da margem ideal usada como referência.`;
+      }
+
+      document.getElementById("rowPrecoIdeal").innerHTML =
+        `<strong>Preço sugerido:</strong> ${brl(precoIdeal)} ${precoIdeal > preco ? `(aprox. +${pct(aumentoPrecoPct)})` : `(abaixo do preço atual)`}`;
+
+      document.getElementById("rowLucroPotencial").innerHTML =
+        `<strong>Lucro mensal potencial:</strong> ${brl(lucroMensalIdeal)}`;
+
+      document.getElementById("rowDiferenca").innerHTML =
+        `<strong>Ganho potencial:</strong> ${diferencaMensal > 0 ? brl(diferencaMensal) + " por mês" : "Seu lucro já está em linha ou acima do benchmark usado"}`;
+
+      document.getElementById("rowDiagnostico").innerHTML =
+        `<strong>Diagnóstico:</strong> ${classe.texto}<br><br><strong>Recomendação:</strong> ${recomendacao}`;
+
+      document.getElementById("rowFonte").innerHTML =
+        `<strong>Referência usada:</strong> ${ref.referencia}<br>
+         <strong>Observação:</strong> ${ref.observacao}<br>
+         <strong>Confiança da referência:</strong> ${ref.confianca}`;
+
+      result.style.display = "block";
+    }
+  </script>
 </body>
 </html>
