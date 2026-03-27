@@ -392,6 +392,15 @@
       });
     }
 
+    function moeda2Casas(valor) {
+      return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
     function percentualSemDecimal(valor) {
       return Math.round(valor * 100) + "%";
     }
@@ -430,7 +439,7 @@
     function montarBlocoSetorial(referencia) {
       return `
         <div class="bloco-setorial">
-          <div class="bloco-setorial-titulo">Leitura para o seu segmento</div>
+          <div class="bloco-setorial-titulo">Contexto do seu segmento</div>
           <div class="linha">${referencia.leituraSetorial}</div>
           <div class="linha"><strong>Ponto de atenção:</strong> ${referencia.atencaoSetorial}</div>
         </div>
@@ -463,9 +472,9 @@
           <span class="badge critico">Diagnóstico crítico</span>
           <div class="headline critico">Seu preço atual não cobre adequadamente o custo unitário.</div>
           <div class="linha">Pelo recorte informado, sua operação não está preservando margem bruta suficiente.</div>
-          <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
-          <div class="linha">Custo por unidade: <strong>${moedaSemCentavos(custoUnitario)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Preço atual: <strong>${moeda2Casas(precoAtual)}</strong></div>
+          <div class="linha">Custo por unidade: <strong>${moeda2Casas(custoUnitario)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
 
           <div class="bloco">
             <div class="linha"><strong>Leitura rápida:</strong> antes de comparar seu negócio com a referência do segmento, o primeiro ajuste precisa ser recuperar margem mínima sobre cada venda.</div>
@@ -523,12 +532,12 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
-          <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
-          <div class="linha">Preço de referência estimado: <strong>${moedaSemCentavos(precoReferencia)}</strong></div>
-          <div class="linha">Gap estimado por unidade: <strong>${moedaSemCentavos(gapPrecoUnitario)}</strong></div>
+          <div class="linha">Preço atual: <strong>${moeda2Casas(precoAtual)}</strong></div>
+          <div class="linha">Preço de referência estimado: <strong>${moeda2Casas(precoReferencia)}</strong></div>
+          <div class="linha">Gap estimado por unidade: <strong>${moeda2Casas(gapPrecoUnitario)}</strong></div>
           <div class="linha">Impacto sobre o faturamento: <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong></div>
 
           <div class="bloco">
@@ -550,12 +559,12 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
-          <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
-          <div class="linha">Preço de referência estimado: <strong>${moedaSemCentavos(precoReferencia)}</strong></div>
-          <div class="linha">Gap estimado por unidade: <strong>${moedaSemCentavos(gapPrecoUnitario)}</strong></div>
+          <div class="linha">Preço atual: <strong>${moeda2Casas(precoAtual)}</strong></div>
+          <div class="linha">Preço de referência estimado: <strong>${moeda2Casas(precoReferencia)}</strong></div>
+          <div class="linha">Gap estimado por unidade: <strong>${moeda2Casas(gapPrecoUnitario)}</strong></div>
           <div class="linha">Impacto sobre o faturamento: <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong></div>
 
           <div class="bloco">
@@ -576,8 +585,8 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
 
           <div class="bloco">
@@ -596,8 +605,8 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
-          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
-          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moeda2Casas(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moeda2Casas(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
 
           <div class="bloco">
