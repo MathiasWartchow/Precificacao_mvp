@@ -127,6 +127,23 @@
       border-top: 1px solid #e5e7eb;
     }
 
+    .bloco-setorial {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+    }
+
+    .bloco-setorial-titulo {
+      margin: 0 0 10px;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #374151;
+      letter-spacing: 0.3px;
+    }
+
     .fonte {
       margin-top: 18px;
       font-size: 13px;
@@ -253,6 +270,12 @@
         margem: 0.15,
         fonteHtml: `
           <strong>Referência utilizada:</strong> 15% de margem bruta, alinhado ao topo da faixa de comércio/lojas usada pelo Sebrae.
+        `,
+        leituraSetorial: `
+          Em mercado e mercearia, a operação costuma depender de giro alto, sensibilidade a preço e margem mais apertada. Por isso, pequenos desvios de preço ou custo podem comprometer uma parcela relevante do resultado mensal.
+        `,
+        atencaoSetorial: `
+          O principal risco aqui é operar com muito volume e pouca sobra financeira. Quando a margem unitária fica comprimida demais, o negócio vende, gira, mas captura menos resultado do que poderia.
         `
       },
       roupas_moda: {
@@ -260,6 +283,12 @@
         margem: 0.50,
         fonteHtml: `
           <strong>Referência utilizada:</strong> 50% de margem bruta, coerente com a dinâmica típica de varejo de moda e posicionamento do setor.
+        `,
+        leituraSetorial: `
+          Em moda, a margem costuma ser mais alta porque o preço não depende só do custo da peça, mas também de posicionamento, marca, coleção, percepção de valor e risco comercial do estoque.
+        `,
+        atencaoSetorial: `
+          Um ponto crítico do setor é o risco de ficar com estoque parado, coleção antiga ou peças sem demanda. Essa exposição normalmente exige uma margem mais robusta nas vendas que giram bem, para compensar remarcações, liquidações e capital empatado em produtos que podem perder força comercial.
         `
       },
       cosmeticos_acessorios: {
@@ -267,6 +296,12 @@
         margem: 0.35,
         fonteHtml: `
           <strong>Referência utilizada:</strong> 35% de margem bruta, como premissa conservadora para uma categoria com potencial de markup superior ao comércio tradicional.
+        `,
+        leituraSetorial: `
+          Em cosméticos e acessórios, a margem costuma ser mais influenciada por valor percebido, marca, apresentação e posicionamento do que apenas por custo direto. Isso normalmente abre mais espaço de captura de margem do que no varejo tradicional.
+        `,
+        atencaoSetorial: `
+          O risco aqui é competir apenas por preço em uma categoria em que branding, experiência e percepção podem sustentar uma margem melhor. Quando isso acontece, o negócio pode vender, mas monetizar menos do que a categoria permite.
         `
       },
       pet_shop: {
@@ -274,6 +309,12 @@
         margem: 0.20,
         fonteHtml: `
           <strong>Referência utilizada:</strong> 20% de margem bruta, como premissa intermediária para um segmento que combina venda de produtos e serviços.
+        `,
+        leituraSetorial: `
+          No segmento pet, a operação costuma combinar produtos, serviços e recorrência. Isso tende a abrir espaço para uma margem mais equilibrada quando o preço está bem posicionado e o cliente percebe conveniência, confiança e continuidade no atendimento.
+        `,
+        atencaoSetorial: `
+          O ponto de atenção é tratar todo o negócio como se tivesse a mesma lógica de margem. Em pet, produtos e serviços costumam ter comportamentos diferentes, e isso pode esconder oportunidade de captura melhor de resultado.
         `
       },
       agencia_consultoria: {
@@ -281,6 +322,12 @@
         margem: 0.30,
         fonteHtml: `
           <strong>Referência utilizada:</strong> 30% de margem bruta, como premissa conservadora para serviços intelectuais e de maior valor agregado.
+        `,
+        leituraSetorial: `
+          Em agência e consultoria, o preço tende a refletir menos custo direto e mais especialização, confiança, repertório e valor percebido pelo cliente. Por isso, a qualidade da entrega e o posicionamento influenciam fortemente a margem possível.
+        `,
+        atencaoSetorial: `
+          O risco mais comum é precificar só com base em horas, esforço ou custo interno, sem capturar adequadamente o valor gerado para o cliente. Isso pode limitar margem mesmo em operações com boa entrega.
         `
       },
       salao_estetica: {
@@ -288,6 +335,12 @@
         margem: 0.30,
         fonteHtml: `
           <strong>Referência utilizada:</strong> 30% de margem bruta, como premissa conservadora para serviços de beleza e estética.
+        `,
+        leituraSetorial: `
+          Em beleza e estética, a margem depende fortemente de percepção de qualidade, experiência entregue, recorrência e capacidade de fidelização. O preço costuma carregar mais do que o custo do procedimento em si.
+        `,
+        atencaoSetorial: `
+          O principal risco é manter preços pressionados em um negócio que depende de agenda, experiência e relacionamento. Isso pode gerar ocupação, mas com captura limitada de valor por atendimento.
         `
       },
       industria: {
@@ -295,6 +348,12 @@
         margem: 0.10,
         fonteHtml: `
           <strong>Referência utilizada:</strong> 10% de margem bruta, em leitura conservadora para o produto.
+        `,
+        leituraSetorial: `
+          Em indústria, pequenas variações de margem por unidade podem ganhar grande relevância quando aplicadas em escala. Por isso, mesmo diferenças aparentemente pequenas de preço ou custo podem gerar impacto relevante no resultado total.
+        `,
+        atencaoSetorial: `
+          O risco aqui é normalizar margens comprimidas por hábito operacional. Em negócios industriais, disciplina de margem é importante porque qualquer desvio tende a ser amplificado pelo volume.
         `
       }
     };
@@ -337,13 +396,13 @@
       return Math.round(valor * 100) + "%";
     }
 
-    function classificarDiagnostico(margemAtual, margemReferencia) {
+    function classificarDiagnostico(margemAtual, margemReferencia, impactoSobreFaturamento) {
       const gap = margemReferencia - margemAtual;
 
-      if (gap > 0.10) {
+      if (gap > 0.10 || impactoSobreFaturamento > 0.20) {
         return "critico";
       }
-      if (gap > 0) {
+      if (gap > 0 || impactoSobreFaturamento > 0.10) {
         return "atencao";
       }
       if (margemAtual <= margemReferencia + 0.10) {
@@ -368,6 +427,16 @@
       e.target.value = formatarInteiroInput(e.target.value);
     });
 
+    function montarBlocoSetorial(referencia) {
+      return `
+        <div class="bloco-setorial">
+          <div class="bloco-setorial-titulo">Leitura para o seu segmento</div>
+          <div class="linha">${referencia.leituraSetorial}</div>
+          <div class="linha"><strong>Ponto de atenção:</strong> ${referencia.atencaoSetorial}</div>
+        </div>
+      `;
+    }
+
     function calcularDiagnostico() {
       const precoAtual = parseMoedaBR(precoInput.value);
       const custoUnitario = parseMoedaBR(custoInput.value);
@@ -385,33 +454,57 @@
         return;
       }
 
+      const referencia = referencias[segmentoKey];
+
       if (custoUnitario >= precoAtual) {
+        const lucroAtualPorUnidade = precoAtual - custoUnitario;
+
         resultado.innerHTML = `
           <span class="badge critico">Diagnóstico crítico</span>
           <div class="headline critico">Seu preço atual não cobre adequadamente o custo unitário.</div>
           <div class="linha">Pelo recorte informado, sua operação não está preservando margem bruta suficiente.</div>
           <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
           <div class="linha">Custo por unidade: <strong>${moedaSemCentavos(custoUnitario)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
+
           <div class="bloco">
             <div class="linha"><strong>Leitura rápida:</strong> antes de comparar seu negócio com a referência do segmento, o primeiro ajuste precisa ser recuperar margem mínima sobre cada venda.</div>
           </div>
+
+          ${montarBlocoSetorial(referencia)}
+
+          <div class="fonte">
+            ${referencia.fonteHtml}
+          </div>
+
           <div class="disclaimer">
-            Este diagnóstico é inicial e simplificado. Não considera impostos, despesas fixas, descontos, frete, comissões, sazonalidade, mix de produtos ou posicionamento de mercado.
+            <strong>Disclaimer:</strong> este diagnóstico é uma análise inicial, baseada exclusivamente nas informações preenchidas e em referências médias de mercado. Não considera custos fixos, regime tributário, mix de produtos ou serviços, concorrência local, descontos, canais de venda, sazonalidade, elasticidade de demanda, inadimplência, frete, comissões ou estratégia comercial. Os resultados devem ser interpretados como indicativos e não substituem uma análise financeira completa do negócio.
           </div>
         `;
         resultado.style.display = "block";
         return;
       }
 
-      const referencia = referencias[segmentoKey];
       const margemAtual = (precoAtual - custoUnitario) / precoAtual;
       const lucroBrutoAtual = (precoAtual - custoUnitario) * volumeMensal;
+      const lucroAtualPorUnidade = precoAtual - custoUnitario;
+
       const precoReferencia = custoUnitario / (1 - referencia.margem);
       const lucroBrutoReferencia = (precoReferencia - custoUnitario) * volumeMensal;
+      const lucroReferenciaPorUnidade = precoReferencia - custoUnitario;
+
       const oportunidadeLucro = Math.max(0, lucroBrutoReferencia - lucroBrutoAtual);
       const anualizado = oportunidadeLucro * 12;
       const gapPrecoUnitario = Math.max(0, precoReferencia - precoAtual);
-      const nivel = classificarDiagnostico(margemAtual, referencia.margem);
+
+      const faturamentoAtual = precoAtual * volumeMensal;
+      const impactoSobreFaturamento = faturamentoAtual > 0 ? oportunidadeLucro / faturamentoAtual : 0;
+
+      const nivel = classificarDiagnostico(
+        margemAtual,
+        referencia.margem,
+        impactoSobreFaturamento
+      );
 
       let html = "";
 
@@ -430,14 +523,18 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
           <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
           <div class="linha">Preço de referência estimado: <strong>${moedaSemCentavos(precoReferencia)}</strong></div>
           <div class="linha">Gap estimado por unidade: <strong>${moedaSemCentavos(gapPrecoUnitario)}</strong></div>
+          <div class="linha">Impacto sobre o faturamento: <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong></div>
 
           <div class="bloco">
             <div class="linha"><strong>Oportunidade de lucro adicional:</strong> <strong>${moedaSemCentavos(oportunidadeLucro)} por mês</strong></div>
             <div class="linha">Hoje, sua operação está deixando aproximadamente <strong>${moedaSemCentavos(oportunidadeLucro)}</strong> por mês na mesa.</div>
+            <div class="linha">Isso representa cerca de <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong> do seu faturamento atual.</div>
             <div class="linha">Em 12 meses, isso representa cerca de <strong>${moedaSemCentavos(anualizado)}</strong> em potencial de ganho não capturado.</div>
             <div class="linha">Mantido o volume atual, uma aproximação gradual do preço à referência estimada pode capturar parte relevante dessa margem adicional.</div>
           </div>
@@ -453,14 +550,18 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
           <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
           <div class="linha">Preço de referência estimado: <strong>${moedaSemCentavos(precoReferencia)}</strong></div>
           <div class="linha">Gap estimado por unidade: <strong>${moedaSemCentavos(gapPrecoUnitario)}</strong></div>
+          <div class="linha">Impacto sobre o faturamento: <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong></div>
 
           <div class="bloco">
             <div class="linha"><strong>Oportunidade de lucro adicional:</strong> <strong>${moedaSemCentavos(oportunidadeLucro)} por mês</strong></div>
             <div class="linha">Pequenos ajustes de preço, posicionamento ou percepção de valor já podem gerar ganho relevante.</div>
+            <div class="linha">Isso representa cerca de <strong>${percentualSemDecimal(impactoSobreFaturamento)}</strong> do seu faturamento atual.</div>
             <div class="linha">Mantido o volume atual, essa diferença representa cerca de <strong>${moedaSemCentavos(anualizado)}</strong> por ano em margem bruta potencial.</div>
           </div>
         `;
@@ -475,6 +576,8 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
 
           <div class="bloco">
@@ -493,6 +596,8 @@
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
+          <div class="linha">Lucro bruto por unidade atual: <strong>${moedaSemCentavos(lucroAtualPorUnidade)}</strong></div>
+          <div class="linha">Lucro bruto por unidade na referência: <strong>${moedaSemCentavos(lucroReferenciaPorUnidade)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
 
           <div class="bloco">
@@ -503,6 +608,8 @@
       }
 
       html += `
+        ${montarBlocoSetorial(referencia)}
+
         <div class="fonte">
           ${referencia.fonteHtml}
         </div>
