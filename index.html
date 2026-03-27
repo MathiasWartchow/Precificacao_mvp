@@ -99,12 +99,20 @@
       margin: 0 0 18px;
     }
 
-    .headline.negativo {
-      color: #b91c1c;
+    .headline.critico {
+      color: #991b1b;
     }
 
-    .headline.positivo {
+    .headline.atencao {
+      color: #b45309;
+    }
+
+    .headline.saudavel {
       color: #065f46;
+    }
+
+    .headline.acima {
+      color: #1d4ed8;
     }
 
     .linha {
@@ -138,6 +146,37 @@
       color: #b91c1c;
       font-weight: 700;
       display: none;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .badge.critico {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge.atencao {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .badge.saudavel {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge.acima {
+      background: #dbeafe;
+      color: #1d4ed8;
     }
 
     @media (max-width: 640px) {
@@ -203,7 +242,6 @@
       </div>
 
       <div id="erro" class="erro">Preencha todos os campos corretamente.</div>
-
       <div id="resultado" class="resultado"></div>
     </div>
   </div>
@@ -256,7 +294,7 @@
         nome: "Indústria",
         margem: 0.10,
         fonteHtml: `
-          <strong>Referência utilizada:</strong> 10% de margem bruta, acima da faixa-base mais restrita do Sebrae para indústria, mas ainda em leitura conservadora para o produto.
+          <strong>Referência utilizada:</strong> 10% de margem bruta, em leitura conservadora para o produto.
         `
       }
     };
@@ -299,6 +337,21 @@
       return Math.round(valor * 100) + "%";
     }
 
+    function classificarDiagnostico(margemAtual, margemReferencia) {
+      const gap = margemReferencia - margemAtual;
+
+      if (gap > 0.10) {
+        return "critico";
+      }
+      if (gap > 0) {
+        return "atencao";
+      }
+      if (margemAtual <= margemReferencia + 0.10) {
+        return "saudavel";
+      }
+      return "acima";
+    }
+
     const precoInput = document.getElementById("precoAtual");
     const custoInput = document.getElementById("custoUnitario");
     const volumeInput = document.getElementById("volume");
@@ -332,20 +385,10 @@
         return;
       }
 
-      const referencia = referencias[segmentoKey];
-      const margemAtual = (precoAtual - custoUnitario) / precoAtual;
-      const lucroBrutoAtual = (precoAtual - custoUnitario) * volumeMensal;
-      const precoReferencia = custoUnitario / (1 - referencia.margem);
-      const lucroBrutoReferencia = (precoReferencia - custoUnitario) * volumeMensal;
-      const oportunidadeLucro = Math.max(0, lucroBrutoReferencia - lucroBrutoAtual);
-      const anualizado = oportunidadeLucro * 12;
-      const acimaOuEmLinha = margemAtual >= referencia.margem;
-
-      let html = "";
-
       if (custoUnitario >= precoAtual) {
-        html = `
-          <div class="headline negativo">Seu preço atual não cobre adequadamente o custo unitário.</div>
+        resultado.innerHTML = `
+          <span class="badge critico">Diagnóstico crítico</span>
+          <div class="headline critico">Seu preço atual não cobre adequadamente o custo unitário.</div>
           <div class="linha">Pelo recorte informado, sua operação não está preservando margem bruta suficiente.</div>
           <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
           <div class="linha">Custo por unidade: <strong>${moedaSemCentavos(custoUnitario)}</strong></div>
@@ -353,20 +396,81 @@
             <div class="linha"><strong>Leitura rápida:</strong> antes de comparar seu negócio com a referência do segmento, o primeiro ajuste precisa ser recuperar margem mínima sobre cada venda.</div>
           </div>
           <div class="disclaimer">
-            Esta é uma leitura inicial e simplificada, baseada apenas nos dados informados. Não considera impostos, despesas fixas, descontos, comissões, frete, sazonalidade, mix de produtos ou posicionamento de mercado.
+            Este diagnóstico é inicial e simplificado. Não considera impostos, despesas fixas, descontos, frete, comissões, sazonalidade, mix de produtos ou posicionamento de mercado.
           </div>
         `;
-        resultado.innerHTML = html;
         resultado.style.display = "block";
         return;
       }
 
-      if (acimaOuEmLinha) {
+      const referencia = referencias[segmentoKey];
+      const margemAtual = (precoAtual - custoUnitario) / precoAtual;
+      const lucroBrutoAtual = (precoAtual - custoUnitario) * volumeMensal;
+      const precoReferencia = custoUnitario / (1 - referencia.margem);
+      const lucroBrutoReferencia = (precoReferencia - custoUnitario) * volumeMensal;
+      const oportunidadeLucro = Math.max(0, lucroBrutoReferencia - lucroBrutoAtual);
+      const anualizado = oportunidadeLucro * 12;
+      const gapPrecoUnitario = Math.max(0, precoReferencia - precoAtual);
+      const nivel = classificarDiagnostico(margemAtual, referencia.margem);
+
+      let html = "";
+
+      if (nivel === "critico") {
         html = `
-          <div class="headline positivo">Sua precificação está alinhada com o padrão do seu segmento.</div>
+          <span class="badge critico">Diagnóstico crítico</span>
+          <div class="headline critico">Sua margem está muito abaixo da referência do seu segmento — há forte indício de subprecificação.</div>
 
           <div class="linha">
-            Com base nos dados informados, sua margem atual está dentro ou acima da referência usada para negócios do seu segmento.
+            Com base nos dados informados, sua precificação atual está distante do padrão de margem normalmente observado no seu segmento.
+          </div>
+
+          <div class="linha">
+            Isso indica que parte relevante do valor que sua operação entrega pode não estar sendo convertida em margem bruta.
+          </div>
+
+          <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
+          <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
+          <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
+          <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
+          <div class="linha">Preço de referência estimado: <strong>${moedaSemCentavos(precoReferencia)}</strong></div>
+          <div class="linha">Gap estimado por unidade: <strong>${moedaSemCentavos(gapPrecoUnitario)}</strong></div>
+
+          <div class="bloco">
+            <div class="linha"><strong>Oportunidade de lucro adicional:</strong> <strong>${moedaSemCentavos(oportunidadeLucro)} por mês</strong></div>
+            <div class="linha">Hoje, sua operação está deixando aproximadamente <strong>${moedaSemCentavos(oportunidadeLucro)}</strong> por mês na mesa.</div>
+            <div class="linha">Em 12 meses, isso representa cerca de <strong>${moedaSemCentavos(anualizado)}</strong> em potencial de ganho não capturado.</div>
+            <div class="linha">Mantido o volume atual, uma aproximação gradual do preço à referência estimada pode capturar parte relevante dessa margem adicional.</div>
+          </div>
+        `;
+      } else if (nivel === "atencao") {
+        html = `
+          <span class="badge atencao">Diagnóstico de atenção</span>
+          <div class="headline atencao">Sua margem está abaixo da referência do segmento, mas relativamente próxima.</div>
+
+          <div class="linha">
+            Seu preço atual parece capturar parte importante do valor da operação, mas ainda há espaço para melhorar margem sem estar, necessariamente, em uma situação crítica.
+          </div>
+
+          <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
+          <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
+          <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
+          <div class="linha">Preço atual: <strong>${moedaSemCentavos(precoAtual)}</strong></div>
+          <div class="linha">Preço de referência estimado: <strong>${moedaSemCentavos(precoReferencia)}</strong></div>
+          <div class="linha">Gap estimado por unidade: <strong>${moedaSemCentavos(gapPrecoUnitario)}</strong></div>
+
+          <div class="bloco">
+            <div class="linha"><strong>Oportunidade de lucro adicional:</strong> <strong>${moedaSemCentavos(oportunidadeLucro)} por mês</strong></div>
+            <div class="linha">Pequenos ajustes de preço, posicionamento ou percepção de valor já podem gerar ganho relevante.</div>
+            <div class="linha">Mantido o volume atual, essa diferença representa cerca de <strong>${moedaSemCentavos(anualizado)}</strong> por ano em margem bruta potencial.</div>
+          </div>
+        `;
+      } else if (nivel === "saudavel") {
+        html = `
+          <span class="badge saudavel">Diagnóstico saudável</span>
+          <div class="headline saudavel">Sua precificação está alinhada com a referência do seu segmento.</div>
+
+          <div class="linha">
+            Com base nos dados preenchidos, sua margem está dentro da faixa esperada para o segmento selecionado.
           </div>
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
@@ -374,44 +478,26 @@
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
 
           <div class="bloco">
-            <div class="linha">
-              <strong>Leitura rápida:</strong> neste recorte simplificado, não há indicação clara de perda relevante de margem frente à referência selecionada.
-            </div>
-            <div class="linha">
-              O próximo foco não é necessariamente aumentar preço, mas preservar demanda, consistência comercial e eficiência operacional.
-            </div>
+            <div class="linha"><strong>Leitura rápida:</strong> neste recorte, não há indicação clara de perda relevante de margem frente à referência utilizada.</div>
+            <div class="linha">O próximo foco tende a estar menos em preço e mais em consistência comercial, demanda e eficiência operacional.</div>
           </div>
         `;
       } else {
         html = `
-          <div class="headline negativo">Sua precificação está abaixo do padrão do seu segmento — isso está limitando seu lucro.</div>
+          <span class="badge acima">Acima da referência</span>
+          <div class="headline acima">Sua margem está acima da referência do seu segmento.</div>
 
           <div class="linha">
-            Com base nos dados informados, sua margem atual está abaixo da referência típica para negócios do seu segmento.
-          </div>
-
-          <div class="linha">
-            Isso sugere que seu preço pode não estar capturando todo o valor que seu produto ou serviço entrega hoje.
+            Seu preço atual, neste recorte simplificado, indica uma captura de margem superior à referência usada para o segmento.
           </div>
 
           <div class="linha">Margem Bruta Atual: <strong>${percentualSemDecimal(margemAtual)}</strong></div>
           <div class="linha">Lucro/Margem Bruta Atual: <strong>${moedaSemCentavos(lucroBrutoAtual)}</strong></div>
           <div class="linha">Referência do segmento: <strong>${percentualSemDecimal(referencia.margem)}</strong></div>
-          <div class="linha">Preço de referência estimado: <strong>${moedaSemCentavos(precoReferencia)}</strong></div>
 
           <div class="bloco">
-            <div class="linha">
-              <strong>Oportunidade de lucro adicional:</strong> <strong>${moedaSemCentavos(oportunidadeLucro)} por mês</strong>
-            </div>
-            <div class="linha">
-              Hoje, sua operação está deixando aproximadamente <strong>${moedaSemCentavos(oportunidadeLucro)}</strong> por mês na mesa.
-            </div>
-            <div class="linha">
-              Em 12 meses, isso representa cerca de <strong>${moedaSemCentavos(anualizado)}</strong> em potencial de ganho não capturado.
-            </div>
-            <div class="linha">
-              Na prática, isso pode ser corrigido com ajustes de preço, revisão de posicionamento ou melhoria da percepção de valor entregue ao cliente.
-            </div>
+            <div class="linha"><strong>Leitura rápida:</strong> isso sugere uma precificação forte neste cenário.</div>
+            <div class="linha">O ponto de atenção aqui não é capturar mais margem a qualquer custo, mas sustentar volume, percepção de valor e competitividade.</div>
           </div>
         `;
       }
