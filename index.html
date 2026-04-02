@@ -5,73 +5,122 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Diagnóstico de Precificação</title>
   <style>
+    :root {
+      --bg: #f4f7fb;
+      --bg-soft: #f8fafc;
+      --card: #ffffff;
+      --card-2: #fcfdff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e5eaf1;
+      --line-2: #eef2f7;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      --shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.04);
+
+      --danger: #c62828;
+      --danger-bg: #fdecec;
+      --warning: #b26a00;
+      --warning-bg: #fff5df;
+      --success: #0f7b47;
+      --success-bg: #e9f8ef;
+      --info: #2563eb;
+      --info-bg: #eaf1ff;
+
+      --radius-xl: 24px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
     * {
       box-sizing: border-box;
     }
 
-    :root {
-      --bg: #f3f6fb;
-      --card: #ffffff;
-      --card-soft: #f8fafc;
-      --text: #142033;
-      --muted: #667085;
-      --line: #e6eaf0;
-      --shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
-
-      --danger: #c62828;
-      --danger-bg: #fdecec;
-
-      --warning: #b26a00;
-      --warning-bg: #fff4dd;
-
-      --success: #0f7b47;
-      --success-bg: #eaf8f0;
-
-      --info: #1d4ed8;
-      --info-bg: #eaf1ff;
-
-      --dark: #101828;
+    html {
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #f7f9fc 0%, #eef3f9 100%);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, #f8fbff 0%, #f4f7fb 45%, #edf2f8 100%);
       color: var(--text);
       padding: 24px;
     }
 
     .wrap {
-      max-width: 1040px;
+      max-width: 1120px;
       margin: 0 auto;
+    }
+
+    .app-shell {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 28px;
+      padding: 20px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
     }
 
     .card {
       background: var(--card);
-      border-radius: 22px;
+      border: 1px solid rgba(15, 23, 42, 0.04);
+      border-radius: var(--radius-xl);
       padding: 30px;
       box-shadow: var(--shadow);
-      border: 1px solid rgba(16, 24, 40, 0.04);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .brand-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: #334155;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #0f172a, #334155);
+      display: inline-block;
     }
 
     h1 {
       margin: 0 0 10px;
-      font-size: 32px;
-      line-height: 1.12;
-      letter-spacing: -0.02em;
+      font-size: 34px;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      max-width: 760px;
     }
 
     .sub {
-      margin: 0 0 24px;
+      margin: 0 0 28px;
       color: var(--muted);
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.6;
       max-width: 760px;
     }
 
     .grid {
       display: grid;
-      gap: 16px;
+      gap: 18px;
     }
 
     .form-grid {
@@ -80,12 +129,18 @@
       gap: 16px;
     }
 
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     label {
       display: block;
       font-weight: 700;
-      margin-bottom: 8px;
       font-size: 14px;
       color: #243041;
+      letter-spacing: -0.01em;
     }
 
     input,
@@ -93,37 +148,54 @@
     button {
       width: 100%;
       border-radius: 14px;
-      border: 1px solid #d8dee8;
-      padding: 15px 16px;
       font-size: 16px;
+    }
+
+    input,
+    select {
+      border: 1px solid #d8e0ea;
       background: #fff;
       color: var(--text);
+      padding: 15px 16px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+      box-shadow: 0 1px 1px rgba(15, 23, 42, 0.02);
+    }
+
+    input::placeholder {
+      color: #94a3b8;
     }
 
     input:focus,
     select:focus {
       outline: none;
-      border-color: #111827;
-      box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.05);
+      border-color: #0f172a;
+      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 4px;
     }
 
     button {
       border: none;
-      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: #fff;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: -0.01em;
       cursor: pointer;
-      margin-top: 8px;
-      transition: transform 0.15s ease, opacity 0.15s ease;
+      box-shadow: 0 14px 26px rgba(15, 23, 42, 0.18);
+      transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+      max-width: 280px;
     }
 
     button:hover {
-      opacity: 0.97;
+      opacity: 0.98;
       transform: translateY(-1px);
-    }
-
-    .full {
-      grid-column: 1 / -1;
+      box-shadow: 0 18px 30px rgba(15, 23, 42, 0.22);
     }
 
     .erro {
@@ -131,6 +203,7 @@
       color: var(--danger);
       font-weight: 700;
       display: none;
+      font-size: 14px;
     }
 
     .resultado {
@@ -140,25 +213,39 @@
 
     .hero {
       display: grid;
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.5fr 1fr;
       gap: 18px;
       margin-bottom: 18px;
     }
 
     .hero-main,
     .hero-side,
-    .box,
-    .mini-card,
+    .metric-card,
+    .compare-box,
     .context-box,
     .disclaimer-box {
-      background: var(--card);
+      background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
       border: 1px solid var(--line);
-      border-radius: 20px;
-      box-shadow: 0 8px 18px rgba(16, 24, 40, 0.04);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
     }
 
     .hero-main {
       padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 140px;
+      height: 140px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0) 70%);
+      pointer-events: none;
     }
 
     .hero-side {
@@ -166,6 +253,20 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-side::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      bottom: -30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(15, 23, 42, 0.05) 0%, rgba(15, 23, 42, 0) 70%);
+      pointer-events: none;
     }
 
     .badge {
@@ -173,7 +274,7 @@
       align-items: center;
       gap: 8px;
       width: fit-content;
-      padding: 9px 13px;
+      padding: 9px 14px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 800;
@@ -228,45 +329,58 @@
     .headline {
       margin: 0 0 10px;
       font-size: 30px;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      max-width: 720px;
     }
 
-    .headline.critico { color: var(--danger); }
-    .headline.atencao { color: var(--warning); }
-    .headline.saudavel { color: var(--success); }
-    .headline.acima { color: var(--info); }
+    .headline.critico {
+      color: var(--danger);
+    }
+
+    .headline.atencao {
+      color: var(--warning);
+    }
+
+    .headline.saudavel {
+      color: var(--success);
+    }
+
+    .headline.acima {
+      color: var(--info);
+    }
 
     .hero-text {
       margin: 0;
       color: #425466;
       font-size: 16px;
-      line-height: 1.6;
+      line-height: 1.65;
       max-width: 95%;
     }
 
     .hero-side-label {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       text-transform: uppercase;
       color: var(--muted);
       letter-spacing: 0.4px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .hero-side-value {
-      font-size: 40px;
+      font-size: 42px;
+      line-height: 0.98;
       font-weight: 800;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 8px;
-      color: var(--dark);
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 10px;
     }
 
     .hero-side-sub {
       font-size: 14px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.55;
+      max-width: 260px;
     }
 
     .metrics-grid {
@@ -276,33 +390,57 @@
       margin-bottom: 18px;
     }
 
-    .mini-card {
+    .metric-card {
       padding: 20px;
-      background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+      position: relative;
+      overflow: hidden;
     }
 
-    .mini-label {
-      font-size: 13px;
-      font-weight: 700;
+    .metric-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(90deg, #cbd5e1, transparent);
+      opacity: 0.8;
+    }
+
+    .metric-card.primary::before {
+      background: linear-gradient(90deg, #0f172a, #475569);
+    }
+
+    .metric-card.warning::before {
+      background: linear-gradient(90deg, #d97706, #fbbf24);
+    }
+
+    .metric-card.info::before {
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+    }
+
+    .metric-label {
+      font-size: 12px;
+      font-weight: 800;
       color: var(--muted);
+      letter-spacing: 0.35px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
       margin-bottom: 10px;
     }
 
-    .mini-value {
+    .metric-value {
       font-size: 30px;
       font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: var(--dark);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: var(--text);
       margin-bottom: 8px;
     }
 
-    .mini-desc {
+    .metric-desc {
       font-size: 14px;
       color: var(--muted);
-      line-height: 1.45;
+      line-height: 1.55;
     }
 
     .compare-grid {
@@ -312,17 +450,17 @@
       margin-bottom: 18px;
     }
 
-    .box {
+    .compare-box {
       padding: 22px;
     }
 
-    .box-title {
+    .compare-title {
       margin: 0 0 16px;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 800;
       color: #243041;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.35px;
     }
 
     .compare-list {
@@ -336,7 +474,7 @@
       align-items: baseline;
       gap: 16px;
       padding-bottom: 12px;
-      border-bottom: 1px solid #edf1f5;
+      border-bottom: 1px solid var(--line-2);
     }
 
     .compare-row:last-child {
@@ -347,51 +485,53 @@
     .compare-name {
       font-size: 14px;
       color: var(--muted);
-      line-height: 1.4;
+      line-height: 1.45;
+      max-width: 70%;
     }
 
     .compare-value {
       font-size: 20px;
       font-weight: 800;
-      color: var(--dark);
+      color: var(--text);
       text-align: right;
+      letter-spacing: -0.02em;
       white-space: nowrap;
     }
 
     .context-box {
       padding: 22px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
     }
 
     .context-title {
       margin: 0 0 14px;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 800;
       color: #243041;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.35px;
     }
 
     .context-text,
     .context-alert {
       margin: 0;
       font-size: 15px;
-      line-height: 1.65;
+      line-height: 1.68;
       color: #425466;
     }
 
     .context-alert {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #edf1f5;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line-2);
     }
 
     .fonte {
-      margin-top: 8px;
+      margin-top: 14px;
       font-size: 13px;
       color: var(--muted);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .disclaimer-box {
@@ -403,102 +543,169 @@
       margin: 0;
       font-size: 12px;
       color: var(--muted);
-      line-height: 1.65;
+      line-height: 1.7;
     }
 
-    @media (max-width: 900px) {
-      .hero,
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
       .metrics-grid,
-      .compare-grid,
-      .form-grid {
+      .compare-grid {
         grid-template-columns: 1fr;
       }
 
       .hero-side-value {
-        font-size: 34px;
+        font-size: 36px;
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 760px) {
       body {
         padding: 16px;
       }
 
+      .app-shell {
+        padding: 12px;
+        border-radius: 22px;
+      }
+
       .card {
         padding: 20px;
-        border-radius: 18px;
+        border-radius: 20px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 14px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        max-width: 100%;
       }
 
       h1 {
-        font-size: 26px;
+        font-size: 28px;
       }
 
       .headline {
         font-size: 24px;
       }
 
-      .mini-value {
+      .metric-value {
         font-size: 26px;
+      }
+
+      .compare-value {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-main,
+      .hero-side,
+      .metric-card,
+      .compare-box,
+      .context-box,
+      .disclaimer-box {
+        border-radius: 16px;
       }
 
       .hero-main,
       .hero-side,
-      .box,
-      .mini-card,
-      .context-box,
-      .disclaimer-box {
-        border-radius: 16px;
+      .metric-card,
+      .compare-box,
+      .context-box {
+        padding: 18px;
+      }
+
+      .headline {
+        font-size: 22px;
+      }
+
+      .hero-side-value {
+        font-size: 32px;
+      }
+
+      .metric-value {
+        font-size: 24px;
+      }
+
+      .hero-text,
+      .metric-desc,
+      .context-text,
+      .context-alert {
+        font-size: 14px;
+      }
+
+      .compare-row {
+        align-items: center;
       }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Descubra se sua margem está abaixo da referência do seu segmento</h1>
-      <p class="sub">
-        Preencha os dados e veja, em segundos, como sua margem está comparada ao seu segmento.
-      </p>
-
-      <div class="grid">
-        <div class="form-grid">
-          <div>
-            <label for="precoAtual">Preço atual</label>
-            <input id="precoAtual" type="text" inputmode="decimal" placeholder="R$ 0,00" />
-          </div>
-
-          <div>
-            <label for="custoUnitario">Custo por unidade (R$)</label>
-            <input id="custoUnitario" type="text" inputmode="decimal" placeholder="R$ 0,00" />
-          </div>
-
-          <div>
-            <label for="volume">Volume mensal</label>
-            <input id="volume" type="text" inputmode="numeric" placeholder="0" />
-          </div>
-
-          <div>
-            <label for="segmento">Segmento</label>
-            <select id="segmento">
-              <option value="">Selecione</option>
-              <option value="mercado_mercearia">Mercado / Mercearia</option>
-              <option value="roupas_moda">Roupas / Moda</option>
-              <option value="cosmeticos_acessorios">Cosméticos / Acessórios</option>
-              <option value="pet_shop">Pets / Pet shop</option>
-              <option value="agencia_consultoria">Agência / Consultoria</option>
-              <option value="salao_estetica">Salão de beleza / Estética</option>
-              <option value="industria">Indústria</option>
-            </select>
+    <div class="app-shell">
+      <div class="card">
+        <div class="topbar">
+          <div class="brand-chip">
+            <span class="brand-dot"></span>
+            Diagnóstico Financeiro de Precificação
           </div>
         </div>
 
-        <div class="full">
-          <button onclick="calcularDiagnostico()">Gerar diagnóstico</button>
+        <h1>Descubra se sua margem está abaixo da referência do seu segmento</h1>
+        <p class="sub">
+          Preencha os dados e veja, em segundos, como sua margem está comparada ao seu segmento.
+        </p>
+
+        <div class="grid">
+          <div class="form-grid">
+            <div class="field">
+              <label for="precoAtual">Preço atual</label>
+              <input id="precoAtual" type="text" inputmode="decimal" placeholder="R$ 0,00" />
+            </div>
+
+            <div class="field">
+              <label for="custoUnitario">Custo por unidade (R$)</label>
+              <input id="custoUnitario" type="text" inputmode="decimal" placeholder="R$ 0,00" />
+            </div>
+
+            <div class="field">
+              <label for="volume">Volume mensal</label>
+              <input id="volume" type="text" inputmode="numeric" placeholder="0" />
+            </div>
+
+            <div class="field">
+              <label for="segmento">Segmento</label>
+              <select id="segmento">
+                <option value="">Selecione</option>
+                <option value="mercado_mercearia">Mercado / Mercearia</option>
+                <option value="roupas_moda">Roupas / Moda</option>
+                <option value="cosmeticos_acessorios">Cosméticos / Acessórios</option>
+                <option value="pet_shop">Pets / Pet shop</option>
+                <option value="agencia_consultoria">Agência / Consultoria</option>
+                <option value="salao_estetica">Salão de beleza / Estética</option>
+                <option value="industria">Indústria</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button onclick="calcularDiagnostico()">Gerar diagnóstico</button>
+          </div>
         </div>
+
+        <div id="erro" class="erro">Preencha todos os campos corretamente.</div>
+        <div id="resultado" class="resultado"></div>
       </div>
-
-      <div id="erro" class="erro">Preencha todos os campos corretamente.</div>
-      <div id="resultado" class="resultado"></div>
     </div>
   </div>
 
@@ -599,7 +806,10 @@
 
     function parseMoedaBR(valor) {
       if (!valor) return 0;
-      const limpo = valor.replace(/[^\d,]/g, "").replace(/\./g, "").replace(",", ".");
+      const limpo = valor
+        .replace(/[^\d,]/g, "")
+        .replace(/\./g, "")
+        .replace(",", ".");
       return Number(limpo) || 0;
     }
 
@@ -656,14 +866,6 @@
       return "acima";
     }
 
-    function badgeClass(nivel) {
-      return nivel;
-    }
-
-    function headlineClass(nivel) {
-      return nivel;
-    }
-
     function montarBadge(nivel) {
       const textos = {
         critico: "Diagnóstico crítico",
@@ -673,7 +875,7 @@
       };
 
       return `
-        <span class="badge ${badgeClass(nivel)}">
+        <span class="badge ${nivel}">
           <span class="dot"></span>
           ${textos[nivel]}
         </span>
@@ -725,7 +927,6 @@
       }
 
       const referencia = referencias[segmentoKey];
-
       const faturamentoAtual = precoAtual * volumeMensal;
       const lucroAtualPorUnidade = precoAtual - custoUnitario;
 
@@ -736,22 +937,22 @@
           <div class="hero">
             <div class="hero-main">
               ${montarBadge(nivel)}
-              <h2 class="headline ${headlineClass(nivel)}">Seu preço atual não cobre adequadamente o custo unitário.</h2>
+              <h2 class="headline ${nivel}">Seu preço atual não cobre adequadamente o custo unitário.</h2>
               <p class="hero-text">
-                Antes de comparar sua operação com a referência do segmento, o primeiro ajuste precisa ser recuperar margem mínima sobre cada venda.
+                Antes de comparar seu negócio com a referência do segmento, o primeiro ajuste precisa ser recuperar margem mínima sobre cada venda.
               </p>
             </div>
 
             <div class="hero-side">
-              <div class="hero-side-label">Lucro bruto por unidade atual</div>
+              <div class="hero-side-label">Indicador principal</div>
               <div class="hero-side-value">${moeda2Casas(lucroAtualPorUnidade)}</div>
-              <div class="hero-side-sub">Neste cenário, sua operação não está preservando margem suficiente por venda.</div>
+              <div class="hero-side-sub">Lucro bruto por unidade atual neste cenário.</div>
             </div>
           </div>
 
           <div class="compare-grid">
-            <div class="box">
-              <h3 class="box-title">Situação atual</h3>
+            <div class="compare-box">
+              <h3 class="compare-title">Seu cenário atual</h3>
               <div class="compare-list">
                 <div class="compare-row">
                   <div class="compare-name">Preço atual</div>
@@ -762,14 +963,14 @@
                   <div class="compare-value">${moeda2Casas(custoUnitario)}</div>
                 </div>
                 <div class="compare-row">
-                  <div class="compare-name">Lucro bruto por unidade</div>
+                  <div class="compare-name">Lucro bruto por unidade atual</div>
                   <div class="compare-value">${moeda2Casas(lucroAtualPorUnidade)}</div>
                 </div>
               </div>
             </div>
 
-            <div class="box">
-              <h3 class="box-title">Leitura rápida</h3>
+            <div class="compare-box">
+              <h3 class="compare-title">Leitura rápida</h3>
               <div class="compare-list">
                 <div class="compare-row">
                   <div class="compare-name">Status</div>
@@ -844,7 +1045,7 @@
         <div class="hero">
           <div class="hero-main">
             ${montarBadge(nivel)}
-            <h2 class="headline ${headlineClass(nivel)}">${titulo}</h2>
+            <h2 class="headline ${nivel}">${titulo}</h2>
             <p class="hero-text">${subtitulo}</p>
           </div>
 
@@ -859,44 +1060,44 @@
       if (nivel === "critico" || nivel === "atencao") {
         html += `
           <div class="metrics-grid">
-            <div class="mini-card">
-              <div class="mini-label">Oportunidade mensal</div>
-              <div class="mini-value">${moedaSemCentavos(oportunidadeLucro)}</div>
-              <div class="mini-desc">Margem adicional estimada que sua operação pode capturar por mês.</div>
+            <div class="metric-card primary">
+              <div class="metric-label">Oportunidade mensal</div>
+              <div class="metric-value">${moedaSemCentavos(oportunidadeLucro)}</div>
+              <div class="metric-desc">Margem adicional estimada que sua operação pode capturar por mês.</div>
             </div>
 
-            <div class="mini-card">
-              <div class="mini-label">Impacto no faturamento</div>
-              <div class="mini-value">${percentualSemDecimal(impactoSobreFaturamento)}</div>
-              <div class="mini-desc">Parcela estimada do faturamento atual que hoje não está sendo convertida em margem.</div>
+            <div class="metric-card warning">
+              <div class="metric-label">Impacto no faturamento</div>
+              <div class="metric-value">${percentualSemDecimal(impactoSobreFaturamento)}</div>
+              <div class="metric-desc">Parcela estimada do faturamento atual que hoje não está sendo convertida em margem.</div>
             </div>
 
-            <div class="mini-card">
-              <div class="mini-label">Gap por unidade</div>
-              <div class="mini-value">${moeda2Casas(gapPrecoUnitario)}</div>
-              <div class="mini-desc">Diferença estimada entre seu preço atual e o preço de referência do segmento.</div>
+            <div class="metric-card info">
+              <div class="metric-label">Gap por unidade</div>
+              <div class="metric-value">${moeda2Casas(gapPrecoUnitario)}</div>
+              <div class="metric-desc">Diferença estimada entre seu preço atual e o preço de referência do segmento.</div>
             </div>
           </div>
         `;
       } else {
         html += `
           <div class="metrics-grid">
-            <div class="mini-card">
-              <div class="mini-label">Margem atual</div>
-              <div class="mini-value">${percentualSemDecimal(margemAtual)}</div>
-              <div class="mini-desc">Margem bruta calculada com base no preço e custo informados.</div>
+            <div class="metric-card primary">
+              <div class="metric-label">Margem atual</div>
+              <div class="metric-value">${percentualSemDecimal(margemAtual)}</div>
+              <div class="metric-desc">Margem bruta calculada com base no preço e custo informados.</div>
             </div>
 
-            <div class="mini-card">
-              <div class="mini-label">Lucro bruto mensal</div>
-              <div class="mini-value">${moedaSemCentavos(lucroBrutoAtual)}</div>
-              <div class="mini-desc">Resultado bruto mensal estimado com o volume atual informado.</div>
+            <div class="metric-card warning">
+              <div class="metric-label">Lucro bruto mensal</div>
+              <div class="metric-value">${moedaSemCentavos(lucroBrutoAtual)}</div>
+              <div class="metric-desc">Resultado bruto mensal estimado com o volume atual informado.</div>
             </div>
 
-            <div class="mini-card">
-              <div class="mini-label">Referência do segmento</div>
-              <div class="mini-value">${percentualSemDecimal(referencia.margem)}</div>
-              <div class="mini-desc">Margem usada como base comparativa para o segmento selecionado.</div>
+            <div class="metric-card info">
+              <div class="metric-label">Referência do segmento</div>
+              <div class="metric-value">${percentualSemDecimal(referencia.margem)}</div>
+              <div class="metric-desc">Margem usada como base comparativa para o segmento selecionado.</div>
             </div>
           </div>
         `;
@@ -904,8 +1105,8 @@
 
       html += `
         <div class="compare-grid">
-          <div class="box">
-            <h3 class="box-title">Seu cenário atual</h3>
+          <div class="compare-box">
+            <h3 class="compare-title">Seu cenário atual</h3>
             <div class="compare-list">
               <div class="compare-row">
                 <div class="compare-name">Margem bruta atual</div>
@@ -926,8 +1127,8 @@
             </div>
           </div>
 
-          <div class="box">
-            <h3 class="box-title">Referência do segmento</h3>
+          <div class="compare-box">
+            <h3 class="compare-title">Referência do segmento</h3>
             <div class="compare-list">
               <div class="compare-row">
                 <div class="compare-name">Margem de referência</div>
