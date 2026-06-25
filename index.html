@@ -1200,9 +1200,18 @@ function renderHero(level, heroContent, metrics) {
     ? formatCurrencyNoDecimals(metrics.additionalProfitOpportunity)
     : heroContent.highlightValue;
 
-  const mainLabel = isOpportunity
-    ? "potencial adicional de lucro por mês"
-    : heroContent.highlightSubtext;
+const relativeImpact =
+  metrics.grossProfitCurrent > 0
+    ? Math.round(
+        (metrics.additionalProfitOpportunity /
+          metrics.grossProfitCurrent) *
+          100
+      )
+    : 0;
+
+const mainLabel = isOpportunity
+  ? `equivalente a ${relativeImpact}% do seu lucro bruto atual`
+  : heroContent.highlightSubtext;
 
   const annualLine = isOpportunity
     ? `<div class="hero-money-secondary">${formatCurrencyNoDecimals(metrics.annualPotential)} por ano, mantendo o volume atual</div>`
@@ -1233,11 +1242,20 @@ function renderExecutiveVerdict(level, metrics) {
 
   if (level === "critico") {
 
-    text = `
-      Existe potencial para capturar aproximadamente
-      <strong>${formatCurrencyNoDecimals(metrics.annualPotential)}</strong>
-      adicionais por ano sem necessidade de aumentar o volume de vendas.
-    `;
+text = `
+  Existe potencial para capturar aproximadamente
+
+  <strong style="
+    display:block;
+    font-size:32px;
+    margin:12px 0;
+    color:#0f172a;
+  ">
+    ${formatCurrencyNoDecimals(metrics.annualPotential)}
+  </strong>
+
+  por ano sem necessidade de aumentar o volume de vendas.
+`;
 
   } else if (level === "atencao") {
 
