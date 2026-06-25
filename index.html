@@ -625,6 +625,30 @@
   line-height: 1.5;
 }
 
+.executive-box {
+  margin-bottom: 14px;
+  padding: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #fafcff 100%);
+}
+
+.executive-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.executive-text {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.executive-text strong {
+  color: #0f172a;
+}
+    
 .cta-box {
   margin-bottom: 14px;
   padding: 22px;
@@ -1118,7 +1142,10 @@
       subtitle:
         "Com base na referência do seu segmento, existe uma oportunidade relevante de melhorar a margem da operação.",
       highlightValue: formatCurrencyNoDecimals(metrics.additionalProfitOpportunity),
-      highlightSubtext: "de oportunidade de lucro adicional por mês"
+      highlightSubtext:
+  `equivalente a ${Math.round(
+    (metrics.additionalProfitOpportunity / metrics.grossProfitCurrent) * 100
+  )}% do seu lucro bruto atual`
     };
   }
 
@@ -1128,7 +1155,10 @@
       subtitle:
         "Seu negócio está próximo da referência do segmento, mas ainda pode capturar mais margem.",
       highlightValue: formatCurrencyNoDecimals(metrics.additionalProfitOpportunity),
-      highlightSubtext: "de oportunidade de lucro adicional por mês"
+      highlightSubtext:
+  `equivalente a ${Math.round(
+    (metrics.additionalProfitOpportunity / metrics.grossProfitCurrent) * 100
+  )}% do seu lucro bruto atual`
     };
   }
 
@@ -1198,12 +1228,10 @@ function renderHero(level, heroContent, metrics) {
     
 function renderExecutiveVerdict(level, metrics) {
 
-  let title = "";
+  let title = "VEREDITO";
   let text = "";
 
   if (level === "critico") {
-
-    title = "VEREDITO EXECUTIVO";
 
     text = `
       Existe potencial para capturar aproximadamente
@@ -1213,38 +1241,33 @@ function renderExecutiveVerdict(level, metrics) {
 
   } else if (level === "atencao") {
 
-    title = "VEREDITO EXECUTIVO";
-
     text = `
-      Sua precificação está relativamente próxima da referência do segmento,
-      mas ainda existe espaço para capturar margem adicional.
+      Sua precificação está próxima da referência do segmento,
+      mas ainda existe oportunidade relevante de ganho adicional de margem.
     `;
 
   } else if (level === "saudavel") {
 
-    title = "VEREDITO EXECUTIVO";
-
     text = `
-      Não identificamos indícios relevantes de subprecificação neste cenário.
+      Não identificamos sinais relevantes de subprecificação neste cenário.
     `;
 
   } else {
 
-    title = "VEREDITO EXECUTIVO";
-
     text = `
-      Sua margem está acima da referência utilizada para o segmento.
-      Isso pode indicar maior captura de valor ou posicionamento diferenciado.
+      Sua margem está acima da referência utilizada para o segmento,
+      o que pode indicar captura superior de valor ou posicionamento diferenciado.
     `;
 
   }
 
   return `
-    <div class="context-box surface-box">
-      <h3 class="context-title">${title}</h3>
-      <p class="context-text">
+    <div class="executive-box surface-box">
+      <div class="executive-label">${title}</div>
+
+      <div class="executive-text">
         ${text}
-      </p>
+      </div>
     </div>
   `;
 }
@@ -1387,11 +1410,14 @@ function renderExecutiveVerdict(level, metrics) {
   return `
     <div class="cta-box surface-box">
       <div>
-        <h3 class="cta-title">Quer analisar sua precificação completa?</h3>
+        <h3 class="cta-title">
+Próximo nível de análise
+</h3>
         <p class="cta-text">
           Esta análise gratuita avalia um produto ou serviço com base em preço, custo, volume e segmento.
-          A versão avançada permite analisar mix de produtos, portfólio, tributos, parcelamento, incentivos,
-          margens por categoria e cenários de reajuste.
+          A análise avançada permite avaliar cenários mais complexos,
+incluindo portfólio de produtos, tributos, parcelamento,
+capital de giro e simulações de reajuste de preços.
         </p>
       </div>
 
