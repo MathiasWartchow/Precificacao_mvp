@@ -1038,40 +1038,45 @@
        7. DIAGNOSIS CONTENT MODELS
     ========================================= */
     function getHeroContent(level, metrics) {
-      if (level === "critico") {
-        return {
-          title: "Sua margem está muito abaixo da referência do seu segmento.",
-          subtitle: "Há forte indício de subprecificação, com impacto relevante na capacidade de captura de resultado da operação.",
-          highlightValue: formatCurrencyNoDecimals(metrics.additionalProfitOpportunity),
-          highlightSubtext: "de oportunidade de lucro adicional por mês"
-        };
-      }
 
-      if (level === "atencao") {
-        return {
-          title: "Sua margem está abaixo da referência do segmento, mas relativamente próxima.",
-          subtitle: "Seu preço atual já captura parte do valor da operação, mas ainda existe espaço concreto para melhorar a margem.",
-          highlightValue: formatCurrencyNoDecimals(metrics.additionalProfitOpportunity),
-          highlightSubtext: "de oportunidade de lucro adicional por mês"
-        };
-      }
+  if (level === "critico") {
+    return {
+      title: "Seu preço está provavelmente abaixo do ideal.",
+      subtitle:
+        "Com base na referência do seu segmento, existe uma oportunidade relevante de melhorar a margem da operação.",
+      highlightValue: formatCurrencyNoDecimals(metrics.additionalProfitOpportunity),
+      highlightSubtext: "de oportunidade de lucro adicional por mês"
+    };
+  }
 
-      if (level === "saudavel") {
-        return {
-          title: "Sua precificação está alinhada com a referência do seu segmento.",
-          subtitle: "Neste recorte, não há indicação clara de perda relevante de margem frente à referência utilizada.",
-          highlightValue: formatPercentRounded(metrics.grossMarginCurrent),
-          highlightSubtext: "de margem bruta atual"
-        };
-      }
+  if (level === "atencao") {
+    return {
+      title: "Existe espaço para melhorar sua precificação.",
+      subtitle:
+        "Seu negócio está próximo da referência do segmento, mas ainda pode capturar mais margem.",
+      highlightValue: formatCurrencyNoDecimals(metrics.additionalProfitOpportunity),
+      highlightSubtext: "de oportunidade de lucro adicional por mês"
+    };
+  }
 
-      return {
-        title: "Sua margem está acima da referência do seu segmento.",
-        subtitle: "Seu preço atual indica uma captura de margem superior à referência usada para o segmento neste cenário.",
-        highlightValue: formatPercentRounded(metrics.grossMarginCurrent),
-        highlightSubtext: "de margem bruta atual"
-      };
-    }
+  if (level === "saudavel") {
+    return {
+      title: "Sua precificação parece adequada.",
+      subtitle:
+        "Neste cenário, não identificamos perda relevante de margem frente à referência utilizada.",
+      highlightValue: formatPercentRounded(metrics.grossMarginCurrent),
+      highlightSubtext: "de margem bruta atual"
+    };
+  }
+
+  return {
+    title: "Seu preço está acima da referência do segmento.",
+    subtitle:
+      "Isso pode indicar maior captura de margem ou um posicionamento diferenciado no mercado.",
+    highlightValue: formatPercentRounded(metrics.grossMarginCurrent),
+    highlightSubtext: "de margem bruta atual"
+  };
+}
 
     /* =========================================
        8. RENDER HELPERS
@@ -1102,7 +1107,59 @@
         </div>
       `;
     }
+    
+function renderExecutiveVerdict(level, metrics) {
 
+  let title = "";
+  let text = "";
+
+  if (level === "critico") {
+
+    title = "VEREDITO EXECUTIVO";
+
+    text = `
+      Existe potencial para capturar aproximadamente
+      <strong>${formatCurrencyNoDecimals(metrics.annualPotential)}</strong>
+      adicionais por ano sem necessidade de aumentar o volume de vendas.
+    `;
+
+  } else if (level === "atencao") {
+
+    title = "VEREDITO EXECUTIVO";
+
+    text = `
+      Sua precificação está relativamente próxima da referência do segmento,
+      mas ainda existe espaço para capturar margem adicional.
+    `;
+
+  } else if (level === "saudavel") {
+
+    title = "VEREDITO EXECUTIVO";
+
+    text = `
+      Não identificamos indícios relevantes de subprecificação neste cenário.
+    `;
+
+  } else {
+
+    title = "VEREDITO EXECUTIVO";
+
+    text = `
+      Sua margem está acima da referência utilizada para o segmento.
+      Isso pode indicar maior captura de valor ou posicionamento diferenciado.
+    `;
+
+  }
+
+  return `
+    <div class="context-box surface-box">
+      <h3 class="context-title">${title}</h3>
+      <p class="context-text">
+        ${text}
+      </p>
+    </div>
+  `;
+}
     function renderMetricCard({ variant, label, value, description }) {
       return `
         <div class="metric-card ${variant} surface-box">
@@ -1286,13 +1343,19 @@
     function renderDiagnosis(formValues, metrics) {
       const heroContent = getHeroContent(metrics.diagnosisLevel, metrics);
 
-      return `
-        ${renderHero(metrics.diagnosisLevel, heroContent)}
-        ${renderMetricsSection(metrics.diagnosisLevel, metrics)}
-        ${renderComparisonSection(formValues, metrics)}
-        ${renderSegmentContext(metrics.reference)}
-        ${renderDisclaimer()}
-      `;
+return `
+  ${renderHero(metrics.diagnosisLevel, heroContent)}
+
+  ${renderExecutiveVerdict(metrics.diagnosisLevel, metrics)}
+
+  ${renderMetricsSection(metrics.diagnosisLevel, metrics)}
+
+  ${renderComparisonSection(formValues, metrics)}
+
+  ${renderSegmentContext(metrics.reference)}
+
+  ${renderDisclaimer()}
+`;
     }
 
     function renderResult(html) {
