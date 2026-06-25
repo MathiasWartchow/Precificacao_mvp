@@ -1196,25 +1196,28 @@
 function renderHero(level, heroContent, metrics) {
   const isOpportunity = level === "critico" || level === "atencao";
 
+  const relativeImpact =
+    metrics.grossProfitCurrent > 0
+      ? Math.round(
+          (metrics.additionalProfitOpportunity / metrics.grossProfitCurrent) * 100
+        )
+      : 0;
+
   const mainValue = isOpportunity
     ? formatCurrencyNoDecimals(metrics.additionalProfitOpportunity)
     : heroContent.highlightValue;
 
-const relativeImpact =
-  metrics.grossProfitCurrent > 0
-    ? Math.round(
-        (metrics.additionalProfitOpportunity /
-          metrics.grossProfitCurrent) *
-          100
-      )
-    : 0;
-
-const mainLabel = isOpportunity
-  ? `equivalente a ${relativeImpact}% do seu lucro bruto atual`
-  : heroContent.highlightSubtext;
+  const mainLabel = isOpportunity
+    ? "potencial adicional de lucro por mês"
+    : heroContent.highlightSubtext;
 
   const annualLine = isOpportunity
-    ? `<div class="hero-money-secondary">${formatCurrencyNoDecimals(metrics.annualPotential)} por ano, mantendo o volume atual</div>`
+    ? `
+      <div class="hero-money-secondary">
+        ${formatCurrencyNoDecimals(metrics.annualPotential)} por ano, mantendo o volume atual<br>
+        <span>(+${relativeImpact}% sobre o lucro bruto atual)</span>
+      </div>
+    `
     : "";
 
   return `
