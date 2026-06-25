@@ -598,6 +598,68 @@
       line-height: 1.7;
     }
 
+    .hero-grid-reversed {
+  grid-template-columns: 1fr 1.35fr;
+}
+
+.hero-money-card {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+}
+
+.hero-money-card .hero-side-label,
+.hero-money-card .hero-side-sub {
+  color: #cbd5e1;
+}
+
+.hero-money-card .hero-side-value {
+  color: #ffffff;
+}
+
+.hero-money-secondary {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.16);
+  font-size: 14px;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.cta-box {
+  margin-bottom: 14px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.cta-title {
+  margin-bottom: 8px;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.cta-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 760px;
+}
+
+.cta-button {
+  width: auto;
+  min-width: 210px;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+}
     /* =========================================
        10. RESPONSIVE
     ========================================= */
@@ -657,7 +719,18 @@
       .compare-value {
         font-size: 18px;
       }
-    }
+    .cta-box {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.cta-button {
+  width: 100%;
+}
+
+.hero-grid-reversed {
+  grid-template-columns: 1fr;
+}}
 
     @media (max-width: 480px) {
       .hero-main,
@@ -1090,23 +1163,38 @@
       `;
     }
 
-    function renderHero(level, heroContent) {
-      return `
-        <div class="hero-grid">
-          <div class="hero-main surface-box">
-            ${renderStatusBadge(level)}
-            <h2 class="hero-headline ${level}">${heroContent.title}</h2>
-            <p class="hero-text">${heroContent.subtitle}</p>
-          </div>
+function renderHero(level, heroContent, metrics) {
+  const isOpportunity = level === "critico" || level === "atencao";
 
-          <div class="hero-side surface-box">
-            <div class="hero-side-label">Indicador principal</div>
-            <div class="hero-side-value">${heroContent.highlightValue}</div>
-            <div class="hero-side-sub">${heroContent.highlightSubtext}</div>
-          </div>
-        </div>
-      `;
-    }
+  const mainValue = isOpportunity
+    ? formatCurrencyNoDecimals(metrics.additionalProfitOpportunity)
+    : heroContent.highlightValue;
+
+  const mainLabel = isOpportunity
+    ? "potencial adicional de lucro por mês"
+    : heroContent.highlightSubtext;
+
+  const annualLine = isOpportunity
+    ? `<div class="hero-money-secondary">${formatCurrencyNoDecimals(metrics.annualPotential)} por ano, mantendo o volume atual</div>`
+    : "";
+
+  return `
+    <div class="hero-grid hero-grid-reversed">
+      <div class="hero-side hero-money-card surface-box">
+        <div class="hero-side-label">Impacto principal</div>
+        <div class="hero-side-value">${mainValue}</div>
+        <div class="hero-side-sub">${mainLabel}</div>
+        ${annualLine}
+      </div>
+
+      <div class="hero-main surface-box">
+        ${renderStatusBadge(level)}
+        <h2 class="hero-headline ${level}">${heroContent.title}</h2>
+        <p class="hero-text">${heroContent.subtitle}</p>
+      </div>
+    </div>
+  `;
+}
     
 function renderExecutiveVerdict(level, metrics) {
 
@@ -1295,6 +1383,24 @@ function renderExecutiveVerdict(level, metrics) {
       `;
     }
 
+    function renderPremiumCTA() {
+  return `
+    <div class="cta-box surface-box">
+      <div>
+        <h3 class="cta-title">Quer analisar sua precificação completa?</h3>
+        <p class="cta-text">
+          Esta análise gratuita avalia um produto ou serviço com base em preço, custo, volume e segmento.
+          A versão avançada permite analisar mix de produtos, portfólio, tributos, parcelamento, incentivos,
+          margens por categoria e cenários de reajuste.
+        </p>
+      </div>
+
+      <button class="cta-button" type="button">
+        Conhecer análise avançada
+      </button>
+    </div>
+  `;
+}
     function renderCriticalCostCoverageCase(formValues, reference) {
       return `
         <div class="hero-grid">
@@ -1344,16 +1450,12 @@ function renderExecutiveVerdict(level, metrics) {
       const heroContent = getHeroContent(metrics.diagnosisLevel, metrics);
 
 return `
-  ${renderHero(metrics.diagnosisLevel, heroContent)}
-
+  ${renderHero(metrics.diagnosisLevel, heroContent, metrics)}
   ${renderExecutiveVerdict(metrics.diagnosisLevel, metrics)}
-
   ${renderMetricsSection(metrics.diagnosisLevel, metrics)}
-
   ${renderComparisonSection(formValues, metrics)}
-
   ${renderSegmentContext(metrics.reference)}
-
+  ${renderPremiumCTA()}
   ${renderDisclaimer()}
 `;
     }
